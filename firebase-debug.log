@@ -1,0 +1,199 @@
+[debug] [2026-02-27T20:38:54.048Z] ----------------------------------------------------------------------
+[debug] [2026-02-27T20:38:54.049Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\kalen\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start --project demo-pd-portal
+[debug] [2026-02-27T20:38:54.050Z] CLI Version:   15.1.0
+[debug] [2026-02-27T20:38:54.050Z] Platform:      win32
+[debug] [2026-02-27T20:38:54.050Z] Node Version:  v24.12.0
+[debug] [2026-02-27T20:38:54.050Z] Time:          Fri Feb 27 2026 12:38:54 GMT-0800 (Pacific Standard Time)
+[debug] [2026-02-27T20:38:54.050Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2026-02-27T20:38:54.714Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2026-02-27T20:38:54.714Z] > authorizing via signed-in user (kalen.eidenschink@gmail.com)
+[debug] [2026-02-27T20:38:54.758Z] openjdk version "21.0.10" 2026-01-20 LTS
+
+[debug] [2026-02-27T20:38:54.759Z] OpenJDK Runtime Environment Temurin-21.0.10+7 (build 21.0.10+7-LTS)
+OpenJDK 64-Bit Server VM Temurin-21.0.10+7 (build 21.0.10+7-LTS, mixed mode, sharing)
+
+[debug] [2026-02-27T20:38:54.767Z] Parsed Java major version: 21
+[info] i  emulators: Starting emulators: auth, functions, firestore, hosting, storage, extensions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, hosting, storage, extensions"}}
+[info] i  emulators: Detected demo project ID "demo-pd-portal", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail. {"metadata":{"emulator":{"name":"hub"},"message":"Detected demo project ID \"demo-pd-portal\", emulated services will use a demo configuration and attempts to access non-emulated services for this project will fail."}}
+[debug] [2026-02-27T20:38:54.779Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.779Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.780Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.780Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.780Z] [hosting] Hosting Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.780Z] [storage] Storage Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.780Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2026-02-27T20:38:54.781Z] Emulator locator file path: C:\Users\kalen\AppData\Local\Temp\hub-demo-pd-portal.json
+[warn] !  emulators: It seems that you are running multiple instances of the emulator suite for project demo-pd-portal. This may result in unexpected behavior. 
+[debug] [2026-02-27T20:38:54.782Z] [hub] writing locator at C:\Users\kalen\AppData\Local\Temp\hub-demo-pd-portal.json
+[debug] [2026-02-27T20:38:54.786Z] [Extensions] Started Extensions emulator, this is a noop.
+[debug] [2026-02-27T20:38:54.789Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.790Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.790Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2026-02-27T20:38:54.790Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"hosting":[{"address":"127.0.0.1","family":"IPv4","port":5000}],"storage":[{"address":"127.0.0.1","family":"IPv4","port":9199}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[debug] [2026-02-27T20:38:54.799Z] defaultcredentials: writing to file C:\Users\kalen\AppData\Roaming\firebase\kalen_eidenschink_gmail.com_application_default_credentials.json
+[debug] [2026-02-27T20:38:54.800Z] Setting GAC to C:\Users\kalen\AppData\Roaming\firebase\kalen_eidenschink_gmail.com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\kalen\\AppData\\Roaming\\firebase\\kalen_eidenschink_gmail.com_application_default_credentials.json"}}
+[debug] [2026-02-27T20:38:54.808Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2026-02-27T20:38:54.808Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2026-02-27T20:38:54.808Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\kalen\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.20.2.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","demo-pd-portal","--rules","C:\\Users\\kalen\\OneDrive\\Documents\\Web app\\PD APP\\firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8080} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\kalen\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.20.2.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"demo-pd-portal\",\"--rules\",\"C:\\\\Users\\\\kalen\\\\OneDrive\\\\Documents\\\\Web app\\\\PD APP\\\\firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8080}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[debug] [2026-02-27T20:38:55.573Z] Feb 27, 2026 12:38:55 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start
+INFO: Started WebSocket server on ws://127.0.0.1:9150
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 12:38:55 PM com.google.cloud.datastore.emulator.firestore.websocket.WebSocketServer start\r\nINFO: Started WebSocket server on ws://127.0.0.1:9150\r\n"}}
+[debug] [2026-02-27T20:38:55.616Z] API endpoint: http://127.0.0.1:8080 {"metadata":{"emulator":{"name":"firestore"},"message":"API endpoint: http://127.0.0.1:8080"}}
+[debug] [2026-02-27T20:38:55.616Z] 
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080
+
+If you are running a Firestore in Datastore Mode project, run:
+
+   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080
+
+Note: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.
+Dev App Server is now running.
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"\nIf you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:\r\n\n   export FIRESTORE_EMULATOR_HOST=127.0.0.1:8080\n\nIf you are running a Firestore in Datastore Mode project, run:\r\n\n   export DATASTORE_EMULATOR_HOST=127.0.0.1:8080\n\nNote: Support for Datastore Mode is in preview. If you encounter any bugs please file at https://github.com/firebase/firebase-tools/issues.\r\nDev App Server is now running.\n\r\n"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2026-02-27T20:38:58.580Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"storage"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2026-02-27T20:38:59.170Z] Temp file directory for storage emulator: C:\Users\kalen\AppData\Local\Temp/firebase/storage/blobs {"metadata":{"emulator":{"name":"storage"},"message":"Temp file directory for storage emulator: C:\\Users\\kalen\\AppData\\Local\\Temp/firebase/storage/blobs"}}
+[debug] [2026-02-27T20:38:59.174Z] Checked if tokens are valid: true, expires at: 1772228197752
+[debug] [2026-02-27T20:38:59.174Z] Checked if tokens are valid: true, expires at: 1772228197752
+[debug] [2026-02-27T20:38:59.175Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/demo-pd-portal [none]
+[debug] [2026-02-27T20:38:59.444Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/demo-pd-portal 403
+[debug] [2026-02-27T20:38:59.444Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/demo-pd-portal {"error":{"code":403,"message":"The caller does not have permission","status":"PERMISSION_DENIED"}}
+[debug] [2026-02-27T20:38:59.445Z] Request to https://firebase.googleapis.com/v1beta1/projects/demo-pd-portal had HTTP Error: 403, The caller does not have permission
+[debug] [2026-02-27T20:38:59.445Z] Specified "public" directory "out" does not exist; Deploy to Hosting site "demo-pd-portal" may fail or be empty.
+[info] i  hosting[demo-pd-portal]: Serving hosting files from: out {"metadata":{"emulator":{"name":"hosting"},"message":"Serving hosting files from: \u001b[1mout\u001b[22m"}}
+[info] +  hosting[demo-pd-portal]: Local server: http://127.0.0.1:5000 {"metadata":{"emulator":{"name":"hosting"},"message":"Local server: \u001b[4m\u001b[1mhttp://127.0.0.1:5000\u001b[22m\u001b[24m"}}
+[debug] [2026-02-27T20:38:59.455Z] [Extensions] Connecting Extensions emulator, this is a noop.
+[info] i  functions: Watching "C:\Users\kalen\OneDrive\Documents\Web app\PD APP\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\kalen\\OneDrive\\Documents\\Web app\\PD APP\\functions\" for Cloud Functions..."}}
+[debug] [2026-02-27T20:38:59.458Z] Customer code is not Node
+[debug] [2026-02-27T20:38:59.459Z] Customer code is not Python code.
+[error] !!  functions: Failed to load function definition from source: FirebaseError: Could not detect runtime for functions at C:\Users\kalen\OneDrive\Documents\Web app\PD APP\functions {"metadata":{"emulator":{"name":"functions"},"message":"Failed to load function definition from source: FirebaseError: Could not detect runtime for functions at C:\\Users\\kalen\\OneDrive\\Documents\\Web app\\PD APP\\functions"}}
+[debug] [2026-02-27T20:38:59.461Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬──────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth       │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Hosting        │ 127.0.0.1:5000 │ n/a                              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Storage        │ 127.0.0.1:9199 │ http://127.0.0.1:4000/storage    │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Extensions     │ 127.0.0.1:5001 │ http://127.0.0.1:4000/extensions │
+└────────────────┴────────────────┴──────────────────────────────────┘
+  Emulator Hub host: 127.0.0.1 port: 4400
+  Other reserved ports: 4500, 9150
+┌─────────────────────────┬───────────────┬─────────────────────┐
+│ Extension Instance Name │ Extension Ref │ View in Emulator UI │
+└─────────────────────────┴───────────────┴─────────────────────┘
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2026-02-27T20:39:19.207Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/demo-pd-portal/trigger_multicast [none]
+[debug] [2026-02-27T20:39:19.207Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-pd-portal/trigger_multicast {"eventId":"b74b4a78-2b93-4396-b0e1-3d2d6d6cf6ca","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/demo-pd-portal","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2026-02-27T20:39:19.207Z","data":{"uid":"H8raqtxqxI1DcBqf1uMGCTpklGTX","email":"admin@solatube.com","emailVerified":false,"metadata":{"creationTime":"2026-02-27T20:39:19.206Z","lastSignInTime":"2026-02-27T20:39:19.206Z"},"customClaims":{},"providerData":[{"rawId":"admin@solatube.com","providerId":"password","email":"admin@solatube.com","federatedId":"admin@solatube.com"}]}}
+[debug] [2026-02-27T20:39:19.214Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/demo-pd-portal/trigger_multicast 200
+[debug] [2026-02-27T20:39:19.214Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/demo-pd-portal/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2026-02-27T20:39:19.286Z] Feb 27, 2026 12:39:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 12:39:19 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T20:39:20.219Z] Feb 27, 2026 12:39:20 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError
+WARNING: Operation failed: 
+evaluation error at L96:23 for 'create' @ L96, evaluation error at L96:23 for 'update' @ L96, Null value error. for 'create' @ L96
+com.google.cloud.datastore.core.exception.DatastoreException: 
+evaluation error at L96:23 for 'create' @ L96, evaluation error at L96:23 for 'update' @ L96, Null value error. for 'create' @ L96
+	at com.google.cloud.datastore.core.exception.DatastoreException$Builder.build(DatastoreException.java:139)
+	at com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.verboseError(DefaultEmulatorRulesAuthorizer.java:318)
+	at com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.withVerboseErrors(DefaultEmulatorRulesAuthorizer.java:295)
+	at com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.checkCommit(DefaultEmulatorRulesAuthorizer.java:114)
+	at com.google.cloud.datastore.emulator.impl.firestore.FirestoreEmulatorHelper.commitHelper(FirestoreEmulatorHelper.java:365)
+	at com.google.cloud.datastore.emulator.impl.firestore.FirestoreEmulatorHelper.internalCommit(FirestoreEmulatorHelper.java:319)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1.internalCommit(CloudFirestoreV1.java:1170)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1.write(CloudFirestoreV1.java:1158)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.handleRequest(CloudFirestoreV1WriteStream.java:222)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.write(CloudFirestoreV1WriteStream.java:144)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.onNext(CloudFirestoreV1WriteStream.java:99)
+	at com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.onNext(CloudFirestoreV1WriteStream.java:27)
+	at io.grpc.stub.ServerCalls$StreamingServerCallHandler$StreamingServerCallListener.onMessage(ServerCalls.java:262)
+	at io.grpc.ForwardingServerCallListener.onMessage(ForwardingServerCallListener.java:33)
+	at io.grpc.Contexts$ContextualizedServerCallListener.onMessage(Contexts.java:76)
+	at io.grpc.ForwardingServerCallListener.onMessage(ForwardingServerCallListener.java:33)
+	at io.grpc.Contexts$ContextualizedServerCallListener.onMessage(Contexts.java:76)
+	at io.grpc.internal.ServerCallImpl$ServerStreamListenerImpl.messagesAvailableInternal(ServerCallImpl.java:334)
+	at io.grpc.internal.ServerCallImpl$ServerStreamListenerImpl.messagesAvailable(ServerCallImpl.java:319)
+	at io.grpc.internal.ServerImpl$JumpToApplicationThreadServerStreamListener$1MessagesAvailable.runInContext(ServerImpl.java:834)
+	at io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)
+	at io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:133)
+	at java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)
+	at java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: com.google.firebase.rules.runtime.common.EvaluationException: Error: C:\Users\kalen\OneDrive\Documents\Web app\PD APP\firestore.rules line [13], column [12]. Null value error.
+	at com.google.firebase.rules.runtime.impl.DefaultEvaluator$TransformEvaluationException.apply(DefaultEvaluator.java:275)
+	at com.google.firebase.rules.runtime.impl.DefaultEvaluator$TransformEvaluationException.apply(DefaultEvaluator.java:261)
+	at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:207)
+	at com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:194)
+	at com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:136)
+	at com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)
+	at com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1007)
+	at com.google.common.util.concurrent.AbstractFuture.addListener(AbstractFuture.java:469)
+	at com.google.common.util.concurrent.FluentFuture$TrustedFuture.addListener(FluentFuture.java:121)
+	at com.google.common.util.concurrent.AbstractCatchingFuture.createAsync(AbstractCatchingFuture.java:58)
+	at com.google.common.util.concurrent.Futures.catchingAsync(Futures.java:407)
+	at com.google.firebase.rules.runtime.impl.DefaultEvaluator.evaluate(DefaultEvaluator.java:177)
+	at com.google.cloud.datastore.emulator.impl.rules.EmulatorRuleClient$EmulatorRuleEvaluator.evaluate(EmulatorRuleClient.java:88)
+	at com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer.lambda$fullEvaluate$0(AsyncTwoPhaseRulesAuthorizer.java:1001)
+	at com.google.cloud.datastore.computation.Computation.tryCatch(Computation.java:439)
+	at com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer.fullEvaluate(AsyncTwoPhaseRulesAuthorizer.java:1000)
+	at com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer$CommitAuthorizerImpl.lambda$checkWrite$0(AsyncTwoPhaseRulesAuthorizer.java:1237)
+	at com.google.cloud.datastore.computation.Computation.lambda$tryClose$1(Computation.java:708)
+	at com.google.cloud.datastore.computation.Computation.tryCatch(Computation.java:439)
+	at com.google.cloud.datastore.computation.Computation.tryFinally(Computation.java:675)
+	at com.google.cloud.datastore.computation.Computation.tryFinally(Computation.java:681)
+	at com.google.cloud.datastore.computation.Computation.tryClose(Computation.java:708)
+	at com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer$CommitAuthorizerImpl.checkWrite(AsyncTwoPhaseRulesAuthorizer.java:1206)
+	at com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.lambda$checkCommit$0(DefaultEmulatorRulesAuthorizer.java:124)
+	at com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.withVerboseErrors(DefaultEmulatorRulesAuthorizer.java:290)
+	... 22 more
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 12:39:20 PM com.google.cloud.datastore.emulator.impl.util.WrappedStreamObserver onError\r\nWARNING: Operation failed: \nevaluation error at L96:23 for 'create' @ L96, evaluation error at L96:23 for 'update' @ L96, Null value error. for 'create' @ L96\r\ncom.google.cloud.datastore.core.exception.DatastoreException: \nevaluation error at L96:23 for 'create' @ L96, evaluation error at L96:23 for 'update' @ L96, Null value error. for 'create' @ L96\r\n\tat com.google.cloud.datastore.core.exception.DatastoreException$Builder.build(DatastoreException.java:139)\r\n\tat com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.verboseError(DefaultEmulatorRulesAuthorizer.java:318)\r\n\tat com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.withVerboseErrors(DefaultEmulatorRulesAuthorizer.java:295)\r\n\tat com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.checkCommit(DefaultEmulatorRulesAuthorizer.java:114)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.FirestoreEmulatorHelper.commitHelper(FirestoreEmulatorHelper.java:365)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.FirestoreEmulatorHelper.internalCommit(FirestoreEmulatorHelper.java:319)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1.internalCommit(CloudFirestoreV1.java:1170)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1.write(CloudFirestoreV1.java:1158)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.handleRequest(CloudFirestoreV1WriteStream.java:222)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.write(CloudFirestoreV1WriteStream.java:144)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.onNext(CloudFirestoreV1WriteStream.java:99)\r\n\tat com.google.cloud.datastore.emulator.impl.firestore.CloudFirestoreV1WriteStream.onNext(CloudFirestoreV1WriteStream.java:27)\r\n\tat io.grpc.stub.ServerCalls$StreamingServerCallHandler$StreamingServerCallListener.onMessage(ServerCalls.java:262)\r\n\tat io.grpc.ForwardingServerCallListener.onMessage(ForwardingServerCallListener.java:33)\r\n\tat io.grpc.Contexts$ContextualizedServerCallListener.onMessage(Contexts.java:76)\r\n\tat io.grpc.ForwardingServerCallListener.onMessage(ForwardingServerCallListener.java:33)\r\n\tat io.grpc.Contexts$ContextualizedServerCallListener.onMessage(Contexts.java:76)\r\n\tat io.grpc.internal.ServerCallImpl$ServerStreamListenerImpl.messagesAvailableInternal(ServerCallImpl.java:334)\r\n\tat io.grpc.internal.ServerCallImpl$ServerStreamListenerImpl.messagesAvailable(ServerCallImpl.java:319)\r\n\tat io.grpc.internal.ServerImpl$JumpToApplicationThreadServerStreamListener$1MessagesAvailable.runInContext(ServerImpl.java:834)\r\n\tat io.grpc.internal.ContextRunnable.run(ContextRunnable.java:37)\r\n\tat io.grpc.internal.SerializingExecutor.run(SerializingExecutor.java:133)\r\n\tat java.base/java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1144)\r\n\tat java.base/java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:642)\r\n\tat java.base/java.lang.Thread.run(Thread.java:1583)\r\nCaused by: com.google.firebase.rules.runtime.common.EvaluationException: Error: C:\\Users\\kalen\\OneDrive\\Documents\\Web app\\PD APP\\firestore.rules line [13], column [12]. Null value error.\r\n\tat com.google.firebase.rules.runtime.impl.DefaultEvaluator$TransformEvaluationException.apply(DefaultEvaluator.java:275)\r\n\tat com.google.firebase.rules.runtime.impl.DefaultEvaluator$TransformEvaluationException.apply(DefaultEvaluator.java:261)\r\n\tat com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:207)\r\n\tat com.google.common.util.concurrent.AbstractCatchingFuture$AsyncCatchingFuture.doFallback(AbstractCatchingFuture.java:194)\r\n\tat com.google.common.util.concurrent.AbstractCatchingFuture.run(AbstractCatchingFuture.java:136)\r\n\tat com.google.common.util.concurrent.DirectExecutor.execute(DirectExecutor.java:30)\r\n\tat com.google.common.util.concurrent.AbstractFuture.executeListener(AbstractFuture.java:1007)\r\n\tat com.google.common.util.concurrent.AbstractFuture.addListener(AbstractFuture.java:469)\r\n\tat com.google.common.util.concurrent.FluentFuture$TrustedFuture.addListener(FluentFuture.java:121)\r\n\tat com.google.common.util.concurrent.AbstractCatchingFuture.createAsync(AbstractCatchingFuture.java:58)\r\n\tat com.google.common.util.concurrent.Futures.catchingAsync(Futures.java:407)\r\n\tat com.google.firebase.rules.runtime.impl.DefaultEvaluator.evaluate(DefaultEvaluator.java:177)\r\n\tat com.google.cloud.datastore.emulator.impl.rules.EmulatorRuleClient$EmulatorRuleEvaluator.evaluate(EmulatorRuleClient.java:88)\r\n\tat com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer.lambda$fullEvaluate$0(AsyncTwoPhaseRulesAuthorizer.java:1001)\r\n\tat com.google.cloud.datastore.computation.Computation.tryCatch(Computation.java:439)\r\n\tat com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer.fullEvaluate(AsyncTwoPhaseRulesAuthorizer.java:1000)\r\n\tat com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer$CommitAuthorizerImpl.lambda$checkWrite$0(AsyncTwoPhaseRulesAuthorizer.java:1237)\r\n\tat com.google.cloud.datastore.computation.Computation.lambda$tryClose$1(Computation.java:708)\r\n\tat com.google.cloud.datastore.computation.Computation.tryCatch(Computation.java:439)\r\n\tat com.google.cloud.datastore.computation.Computation.tryFinally(Computation.java:675)\r\n\tat com.google.cloud.datastore.computation.Computation.tryFinally(Computation.java:681)\r\n\tat com.google.cloud.datastore.computation.Computation.tryClose(Computation.java:708)\r\n\tat com.google.cloud.datastore.core.auth.rules.AsyncTwoPhaseRulesAuthorizer$CommitAuthorizerImpl.checkWrite(AsyncTwoPhaseRulesAuthorizer.java:1206)\r\n\tat com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.lambda$checkCommit$0(DefaultEmulatorRulesAuthorizer.java:124)\r\n\tat com.google.cloud.datastore.emulator.impl.rules.DefaultEmulatorRulesAuthorizer.withVerboseErrors(DefaultEmulatorRulesAuthorizer.java:290)\r\n\t... 22 more\r\n\r\n"}}
+[debug] [2026-02-27T20:39:20.234Z] Feb 27, 2026 12:39:20 PM io.netty.channel.DefaultChannelPipeline onUnhandledInboundException
+WARNING: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.
+java.net.SocketException: Connection reset
+	at java.base/sun.nio.ch.SocketChannelImpl.throwConnectionReset(SocketChannelImpl.java:401)
+	at java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:434)
+	at io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:255)
+	at io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)
+	at io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:356)
+	at io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)
+	at io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)
+	at io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)
+	at io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)
+	at io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)
+	at io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 12:39:20 PM io.netty.channel.DefaultChannelPipeline onUnhandledInboundException\r\nWARNING: An exceptionCaught() event was fired, and it reached at the tail of the pipeline. It usually means the last handler in the pipeline did not handle the exception.\r\njava.net.SocketException: Connection reset\r\n\tat java.base/sun.nio.ch.SocketChannelImpl.throwConnectionReset(SocketChannelImpl.java:401)\r\n\tat java.base/sun.nio.ch.SocketChannelImpl.read(SocketChannelImpl.java:434)\r\n\tat io.netty.buffer.PooledByteBuf.setBytes(PooledByteBuf.java:255)\r\n\tat io.netty.buffer.AbstractByteBuf.writeBytes(AbstractByteBuf.java:1132)\r\n\tat io.netty.channel.socket.nio.NioSocketChannel.doReadBytes(NioSocketChannel.java:356)\r\n\tat io.netty.channel.nio.AbstractNioByteChannel$NioByteUnsafe.read(AbstractNioByteChannel.java:151)\r\n\tat io.netty.channel.nio.NioEventLoop.processSelectedKey(NioEventLoop.java:796)\r\n\tat io.netty.channel.nio.NioEventLoop.processSelectedKeysOptimized(NioEventLoop.java:732)\r\n\tat io.netty.channel.nio.NioEventLoop.processSelectedKeys(NioEventLoop.java:658)\r\n\tat io.netty.channel.nio.NioEventLoop.run(NioEventLoop.java:562)\r\n\tat io.netty.util.concurrent.SingleThreadEventExecutor$4.run(SingleThreadEventExecutor.java:998)\r\n\tat io.netty.util.internal.ThreadExecutorMap$2.run(ThreadExecutorMap.java:74)\r\n\tat io.netty.util.concurrent.FastThreadLocalRunnable.run(FastThreadLocalRunnable.java:30)\r\n\tat java.base/java.lang.Thread.run(Thread.java:1583)\r\n\r\n"}}
+[info] i  firestore: Change detected, updating rules... 
+[debug] [2026-02-27T20:39:44.938Z] >>> [apiv2][query] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules [none]
+[debug] [2026-02-27T20:39:44.938Z] >>> [apiv2][body] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules {"ignore_errors":true,"rules":{"files":[{"name":"security.rules","content":"rules_version = '2';\r\n\r\nservice cloud.firestore {\r\n  match /databases/{database}/documents {\r\n\r\n    // ── Helper Functions ──────────────────────────────\r\n    function isAuthenticated() {\r\n      return request.auth != null;\r\n    }\r\n\r\n    function isAdmin() {\r\n      return isAuthenticated()\r\n        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';\r\n    }\r\n\r\n    function isManager() {\r\n      return isAuthenticated()\r\n        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'manager';\r\n    }\r\n\r\n    function isAdminOrManager() {\r\n      return isAdmin() || isManager();\r\n    }\r\n\r\n    // ── Contacts ──────────────────────────────────────\r\n    match /contacts/{contactId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Events ────────────────────────────────────────\r\n    match /events/{eventId} {\r\n      allow read: if true; // Public can view published events\r\n      allow write: if isAdminOrManager();\r\n\r\n      match /registrations/{registrationId} {\r\n        allow read: if isAdminOrManager();\r\n        allow create: if true; // Public can register\r\n      }\r\n\r\n      match /surveys/{surveyId} {\r\n        allow read: if true;\r\n        allow write: if isAdminOrManager();\r\n      }\r\n\r\n      match /surveyResponses/{responseId} {\r\n        allow read: if isAdminOrManager();\r\n        allow create: if true; // Public can submit responses\r\n      }\r\n    }\r\n\r\n    // ── Messages ──────────────────────────────────────\r\n    match /messages/{messageId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Templates ─────────────────────────────────────\r\n    match /templates/{templateId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Surveys ───────────────────────────────────────\r\n    match /surveys/{surveyId} {\r\n      allow read: if true;\r\n      allow write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Suppression ───────────────────────────────────\r\n    match /suppression/{recordId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Prospects ─────────────────────────────────────\r\n    match /prospects/{prospectId} {\r\n      allow read, write: if isAdminOrManager();\r\n\r\n      match /conversations/{messageId} {\r\n        allow read, write: if isAdminOrManager();\r\n      }\r\n    }\r\n\r\n    // ── Playbooks ─────────────────────────────────────\r\n    match /playbooks/{playbookId} {\r\n      allow read: if isAdminOrManager();\r\n      allow write: if isAdmin();\r\n    }\r\n\r\n    // ── Skills ────────────────────────────────────────\r\n    match /skills/{skillId} {\r\n      allow read: if isAdminOrManager();\r\n      allow write: if isAdmin();\r\n    }\r\n\r\n    // ── Users ─────────────────────────────────────────\r\n    match /users/{userId} {\r\n      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());\r\n      // Allow authenticated users to create their own doc (needed for initial setup)\r\n      allow create: if isAuthenticated() && request.auth.uid == userId;\r\n      allow update, delete: if isAdmin();\r\n    }\r\n\r\n    // ── Logs ──────────────────────────────────────────\r\n    match /logs/{logId} {\r\n      allow read: if isAdminOrManager();\r\n      allow create: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Pending Requests ──────────────────────────────\r\n    match /pendingRequests/{requestId} {\r\n      allow read, write: if isAdminOrManager();\r\n      allow create: if true; // Public can submit signup requests\r\n    }\r\n  }\r\n}\r\n"}]}}
+[debug] [2026-02-27T20:39:44.942Z] Feb 27, 2026 12:39:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 12:39:44 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T20:39:45.000Z] Feb 27, 2026 12:39:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 12:39:45 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T20:39:45.106Z] <<< [apiv2][status] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules 200
+[debug] [2026-02-27T20:39:45.107Z] <<< [apiv2][body] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules {}
+[info] +  firestore: Rules updated. 
