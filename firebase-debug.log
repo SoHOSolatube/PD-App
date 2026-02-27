@@ -1400,3 +1400,97 @@ INFO: Detected non-HTTP/2 connection.
 [debug] [2026-02-27T22:22:28.821Z] Feb 27, 2026 2:22:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
 INFO: Detected non-HTTP/2 connection.
  {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:22:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:23:28.781Z] Feb 27, 2026 2:23:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:23:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:23:28.781Z] Feb 27, 2026 2:23:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:23:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:23:28.782Z] Feb 27, 2026 2:23:28 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:23:28 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreWriteHandler onClose\r\nINFO: channel closed\r\n"}}
+[debug] [2026-02-27T22:23:28.825Z] Feb 27, 2026 2:23:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:23:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:23:28.827Z] Feb 27, 2026 2:23:28 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:23:28 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\r\nINFO: channel closed\r\n"}}
+[debug] [2026-02-27T22:24:21.200Z] Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:21.218Z] Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:21.224Z] Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:21.242Z] Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:21 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:32.008Z] Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:32.019Z] Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:32.038Z] Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:32.701Z] Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:32.710Z] Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:32 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:38.059Z] Feb 27, 2026 2:24:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:38.074Z] Feb 27, 2026 2:24:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:24:38.084Z] Feb 27, 2026 2:24:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:24:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:25:08.090Z] Feb 27, 2026 2:25:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:25:08 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:25:38.864Z] Feb 27, 2026 2:25:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:25:38 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:25:38.866Z] Feb 27, 2026 2:25:38 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:25:38 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\r\nINFO: channel closed\r\n"}}
+[info] i  firestore: Change detected, updating rules... 
+[debug] [2026-02-27T22:30:15.463Z] >>> [apiv2][query] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules [none]
+[debug] [2026-02-27T22:30:15.463Z] >>> [apiv2][body] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules {"ignore_errors":true,"rules":{"files":[{"name":"security.rules","content":"rules_version = '2';\r\n\r\nservice cloud.firestore {\r\n  match /databases/{database}/documents {\r\n\r\n    // ── Helper Functions ──────────────────────────────\r\n    function isAuthenticated() {\r\n      return request.auth != null;\r\n    }\r\n\r\n    function getUserRole() {\r\n      let userDoc = /databases/$(database)/documents/users/$(request.auth.uid);\r\n      return exists(userDoc) ? get(userDoc).data.role : 'none';\r\n    }\r\n\r\n    function isAdmin() {\r\n      return isAuthenticated() && getUserRole() == 'admin';\r\n    }\r\n\r\n    function isManager() {\r\n      return isAuthenticated() && getUserRole() == 'manager';\r\n    }\r\n\r\n    function isAdminOrManager() {\r\n      return isAuthenticated()\r\n        && (getUserRole() == 'admin' || getUserRole() == 'manager');\r\n    }\r\n\r\n    // ── Contacts ──────────────────────────────────────\r\n    match /contacts/{contactId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Events ────────────────────────────────────────\r\n    match /events/{eventId} {\r\n      allow read: if true; // Public can view published events\r\n      allow write: if isAdminOrManager();\r\n\r\n      match /registrations/{registrationId} {\r\n        allow read: if isAdminOrManager();\r\n        allow create: if true; // Public can register\r\n      }\r\n\r\n      match /surveys/{surveyId} {\r\n        allow read: if true;\r\n        allow write: if isAdminOrManager();\r\n      }\r\n\r\n      match /surveyResponses/{responseId} {\r\n        allow read: if isAdminOrManager();\r\n        allow create: if true; // Public can submit responses\r\n      }\r\n    }\r\n\r\n    // ── Messages ──────────────────────────────────────\r\n    match /messages/{messageId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Templates ─────────────────────────────────────\r\n    match /templates/{templateId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Surveys ───────────────────────────────────────\r\n    match /surveys/{surveyId} {\r\n      allow read: if true;\r\n      allow write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Suppression ───────────────────────────────────\r\n    match /suppression/{recordId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Prospects ─────────────────────────────────────\r\n    match /prospects/{prospectId} {\r\n      allow read, write: if isAdminOrManager();\r\n\r\n      match /conversations/{messageId} {\r\n        allow read, write: if isAdminOrManager();\r\n      }\r\n    }\r\n\r\n    // ── Playbooks ─────────────────────────────────────\r\n    match /playbooks/{playbookId} {\r\n      allow read: if isAdminOrManager();\r\n      allow write: if isAdmin();\r\n    }\r\n\r\n    // ── Skills ────────────────────────────────────────\r\n    match /skills/{skillId} {\r\n      allow read: if isAdminOrManager();\r\n      allow write: if isAdmin();\r\n    }\r\n\r\n    // ── Users ─────────────────────────────────────────\r\n    match /users/{userId} {\r\n      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());\r\n      // Allow authenticated users to create their own doc (needed for initial setup)\r\n      allow create: if isAuthenticated() && request.auth.uid == userId;\r\n      allow update, delete: if isAdmin();\r\n    }\r\n\r\n    // ── Settings ──────────────────────────────────────\r\n    match /settings/{settingId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n    // ── Logs ──────────────────────────────────────────\r\n    match /logs/{logId} {\r\n      allow read: if isAdminOrManager();\r\n      allow create: if isAdminOrManager();\r\n    }\r\n\r\n    // ── Pending Requests ──────────────────────────────\r\n    match /pendingRequests/{requestId} {\r\n      allow read, write: if isAdminOrManager();\r\n      allow create: if true; // Public can submit signup requests\r\n    }\r\n\r\n    // ── Events ───────────────────────────────────────\r\n    match /events/{eventId} {\r\n      allow read: if true; // Public can read published events\r\n      allow write: if isAdminOrManager();\r\n\r\n      match /registrations/{regId} {\r\n        allow read: if isAdminOrManager();\r\n        allow create: if true; // Public can register\r\n        allow delete: if isAdminOrManager();\r\n      }\r\n    }\r\n\r\n    // ── Skills ───────────────────────────────────────\r\n    match /skills/{skillId} {\r\n      allow read, write: if isAdminOrManager();\r\n    }\r\n  }\r\n}\r\n"}]}}
+[debug] [2026-02-27T22:30:15.465Z] Feb 27, 2026 2:30:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:30:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:30:15.471Z] Feb 27, 2026 2:30:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:30:15 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:30:15.509Z] <<< [apiv2][status] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules 200
+[debug] [2026-02-27T22:30:15.509Z] <<< [apiv2][body] PUT http://127.0.0.1:8080/emulator/v1/projects/demo-pd-portal:securityRules {"issues":[{"sourcePosition":{"fileName":"security.rules","line":20,"column":14,"currentOffset":528,"endOffset":536},"description":"Unused function: isManager.","severity":"WARNING"}]}
+[warn] !  firestore.rules:20:14 - WARNING Unused function: isManager. 
+[info] +  firestore: Rules updated. 
+[debug] [2026-02-27T22:31:10.069Z] Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:31:10.080Z] Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:31:10.088Z] Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:31:10.180Z] Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:31:10.191Z] Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:31:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:32:10.207Z] Feb 27, 2026 2:32:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:32:10 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead\r\nINFO: Detected non-HTTP/2 connection.\r\n"}}
+[debug] [2026-02-27T22:32:10.209Z] Feb 27, 2026 2:32:10 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose
+INFO: channel closed
+ {"metadata":{"emulator":{"name":"firestore"},"message":"Feb 27, 2026 2:32:10 PM com.google.cloud.datastore.emulator.firestore.webchannel.FirestoreV1WebChannelAdapter$FirestoreListenHandler onClose\r\nINFO: channel closed\r\n"}}

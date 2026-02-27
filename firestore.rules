@@ -117,5 +117,22 @@ service cloud.firestore {
       allow read, write: if isAdminOrManager();
       allow create: if true; // Public can submit signup requests
     }
+
+    // ── Events ───────────────────────────────────────
+    match /events/{eventId} {
+      allow read: if true; // Public can read published events
+      allow write: if isAdminOrManager();
+
+      match /registrations/{regId} {
+        allow read: if isAdminOrManager();
+        allow create: if true; // Public can register
+        allow delete: if isAdminOrManager();
+      }
+    }
+
+    // ── Skills ───────────────────────────────────────
+    match /skills/{skillId} {
+      allow read, write: if isAdminOrManager();
+    }
   }
 }
