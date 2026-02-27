@@ -5,6 +5,8 @@ export interface Contact {
     name: string;
     phone: string;
     email: string;
+    company?: string;
+    status: 'active' | 'inactive';
     notes: Note[];
     categories: string[];
     optOutEmail: boolean;
