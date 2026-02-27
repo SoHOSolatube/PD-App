@@ -159,5 +159,16 @@ service cloud.firestore {
     match /suppressionList/{entryId} {
       allow read, write: if isAdminOrManager();
     }
+
+    // ── Prospects ────────────────────────────────────
+    match /prospects/{prospectId} {
+      allow read, write: if isAdminOrManager();
+      allow create: if true; // Public form submissions
+    }
+
+    // ── Playbooks ────────────────────────────────────
+    match /playbooks/{playbookId} {
+      allow read, write: if isAdminOrManager();
+    }
   }
 }
