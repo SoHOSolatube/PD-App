@@ -8,12 +8,20 @@ import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import { useAuth } from '@/context/AuthContext';
 import {
     getCategories,
     setCategories as saveCategories,
     type Category,
 } from '@/lib/services/settingsService';
+import {
+    getAllSkills,
+    createSkill,
+    updateSkill,
+    deleteSkill,
+    type Skill,
+} from '@/lib/services/skillService';
 import { toast } from 'sonner';
 import { Plug, Tags, UserSearch, Sparkles, Plus, Trash2, Pencil, Check, X } from 'lucide-react';
 
@@ -76,11 +84,7 @@ export default function SettingsPage() {
                 </TabsContent>
 
                 <TabsContent value="skills">
-                    <PlaceholderTab
-                        title="AI Skills"
-                        description="Configure AI prompts, brand guidelines, and style settings."
-                        phase={3}
-                    />
+                    <SkillsTab />
                 </TabsContent>
             </Tabs>
         </div>
@@ -393,6 +397,202 @@ function CategoriesTab() {
                 )}
             </CardContent>
         </Card>
+    );
+}
+
+function SkillsTab() {
+    const [skills, setSkills] = useState<Skill[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [dialogOpen, setDialogOpen] = useState(false);
+    const [editingSkill, setEditingSkill] = useState<Skill | null>(null);
+    const [form, setForm] = useState({
+        name: '',
+        description: '',
+        prompt: '',
+        toneOfVoice: '',
+    });
+
+    useEffect(() => {
+        getAllSkills().then((data) => {
+            setSkills(data);
+            setLoading(false);
+        });
+    }, []);
+
+    const reload = async () => {
+        setSkills(await getAllSkills());
+    };
+
+    const openDialog = (skill?: Skill) => {
+        if (skill) {
+            setEditingSkill(skill);
+            setForm({
+                name: skill.name,
+                description: skill.description,
+                prompt: skill.prompt,
+                toneOfVoice: skill.toneOfVoice || '',
+            });
+        } else {
+            setEditingSkill(null);
+            setForm({ name: '', description: '', prompt: '', toneOfVoice: '' });
+        }
+        setDialogOpen(true);
+    };
+
+    const handleSave = async () => {
+        if (!form.name.trim() || !form.prompt.trim()) return;
+        if (editingSkill) {
+            await updateSkill(editingSkill.id, form);
+        } else {
+            await createSkill(form);
+        }
+        setDialogOpen(false);
+        reload();
+        toast.success(editingSkill ? 'Skill updated' : 'Skill created');
+    };
+
+    const handleDelete = async (id: string) => {
+        await deleteSkill(id);
+        reload();
+        toast.success('Skill deleted');
+    };
+
+    if (loading) {
+        return (
+            <Card>
+                <CardContent className="flex h-32 items-center justify-center">
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                </CardContent>
+            </Card>
+        );
+    }
+
+    return (
+        <>
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center justify-between">
+                        <div>
+                            <CardTitle>AI Skills</CardTitle>
+                            <CardDescription>
+                                Configure AI prompts, tone of voice, and brand guidelines for email generation.
+                            </CardDescription>
+                        </div>
+                        <Button onClick={() => openDialog()} className="gap-1" size="sm">
+                            <Plus className="h-4 w-4" />
+                            Add Skill
+                        </Button>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-2">
+                    {skills.length === 0 ? (
+                        <p className="py-4 text-center text-sm text-muted-foreground">
+                            No skills configured yet.
+                        </p>
+                    ) : (
+                        skills.map((skill) => (
+                            <div
+                                key={skill.id}
+                                className="flex items-center justify-between rounded-lg border px-4 py-3"
+                            >
+                                <div>
+                                    <p className="text-sm font-medium">{skill.name}</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        {skill.description || skill.prompt.slice(0, 80)}…
+                                    </p>
+                                </div>
+                                <div className="flex gap-1">
+                                    <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        className="h-7 w-7"
+                                        onClick={() => openDialog(skill)}
+                                    >
+                                        <Pencil className="h-3.5 w-3.5" />
+                                    </Button>
+                                    <Button
+                                        size="icon"
+                                        variant="ghost"
+                                        className="h-7 w-7 text-destructive hover:text-destructive"
+                                        onClick={() => handleDelete(skill.id)}
+                                    >
+                                        <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                </div>
+                            </div>
+                        ))
+                    )}
+                </CardContent>
+            </Card>
+
+            {/* Skill Dialog */}
+            {dialogOpen && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+                    <div className="w-full max-w-lg rounded-lg bg-background p-6 shadow-xl">
+                        <h3 className="mb-4 text-lg font-semibold">
+                            {editingSkill ? 'Edit Skill' : 'New Skill'}
+                        </h3>
+                        <div className="space-y-4">
+                            <div className="space-y-1">
+                                <Label>Name *</Label>
+                                <Input
+                                    value={form.name}
+                                    onChange={(e) =>
+                                        setForm({ ...form, name: e.target.value })
+                                    }
+                                    placeholder="e.g. Newsletter Writer"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <Label>Description</Label>
+                                <Input
+                                    value={form.description}
+                                    onChange={(e) =>
+                                        setForm({ ...form, description: e.target.value })
+                                    }
+                                    placeholder="Brief description of this skill"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <Label>System Prompt *</Label>
+                                <Textarea
+                                    value={form.prompt}
+                                    onChange={(e) =>
+                                        setForm({ ...form, prompt: e.target.value })
+                                    }
+                                    placeholder="You are a professional email copywriter for Solatube International…"
+                                    className="min-h-[120px]"
+                                />
+                            </div>
+                            <div className="space-y-1">
+                                <Label>Tone of Voice</Label>
+                                <Input
+                                    value={form.toneOfVoice}
+                                    onChange={(e) =>
+                                        setForm({ ...form, toneOfVoice: e.target.value })
+                                    }
+                                    placeholder="e.g. Professional, friendly, concise"
+                                />
+                            </div>
+                            <div className="flex justify-end gap-2">
+                                <Button
+                                    variant="outline"
+                                    onClick={() => setDialogOpen(false)}
+                                >
+                                    Cancel
+                                </Button>
+                                <Button
+                                    onClick={handleSave}
+                                    disabled={!form.name.trim() || !form.prompt.trim()}
+                                >
+                                    {editingSkill ? 'Update' : 'Create'}
+                                </Button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }
 
