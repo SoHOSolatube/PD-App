@@ -134,5 +134,16 @@ service cloud.firestore {
     match /skills/{skillId} {
       allow read, write: if isAdminOrManager();
     }
+
+    // ── Surveys ──────────────────────────────────────
+    match /surveys/{surveyId} {
+      allow read: if true; // Public can view active surveys
+      allow write: if isAdminOrManager();
+
+      match /responses/{responseId} {
+        allow read: if isAdminOrManager();
+        allow create: if true; // Public can submit responses
+      }
+    }
   }
 }
