@@ -37,8 +37,7 @@ src/
 ├── hooks/         # Custom React hooks
 └── styles/        # Global styles
 functions/         # Firebase Edge Functions
-docs/              # Planning documents
-files/             # Original spec documents
+docs/              # Spec documents & planning docs
 ```
 
 ## Planning Docs
