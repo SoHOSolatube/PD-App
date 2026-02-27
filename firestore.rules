@@ -145,5 +145,19 @@ service cloud.firestore {
         allow create: if true; // Public can submit responses
       }
     }
+
+    // ── SMS Inbox ────────────────────────────────────
+    match /smsInbox/{conversationId} {
+      allow read, write: if isAdminOrManager();
+
+      match /messages/{messageId} {
+        allow read, write: if isAdminOrManager();
+      }
+    }
+
+    // ── Suppression List ─────────────────────────────
+    match /suppressionList/{entryId} {
+      allow read, write: if isAdminOrManager();
+    }
   }
 }
