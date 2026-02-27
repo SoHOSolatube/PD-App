@@ -8,18 +8,22 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function getUserRole() {
+      let userDoc = /databases/$(database)/documents/users/$(request.auth.uid);
+      return exists(userDoc) ? get(userDoc).data.role : 'none';
+    }
+
     function isAdmin() {
-      return isAuthenticated()
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+      return isAuthenticated() && getUserRole() == 'admin';
     }
 
     function isManager() {
-      return isAuthenticated()
-        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'manager';
+      return isAuthenticated() && getUserRole() == 'manager';
     }
 
     function isAdminOrManager() {
-      return isAdmin() || isManager();
+      return isAuthenticated()
+        && (getUserRole() == 'admin' || getUserRole() == 'manager');
     }
 
     // ── Contacts ──────────────────────────────────────
@@ -98,6 +102,10 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
+    // ── Settings ──────────────────────────────────────
+    match /settings/{settingId} {
+      allow read, write: if isAdminOrManager();
+    }
     // ── Logs ──────────────────────────────────────────
     match /logs/{logId} {
       allow read: if isAdminOrManager();
