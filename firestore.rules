@@ -1,0 +1,111 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper Functions ──────────────────────────────
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isAuthenticated()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin';
+    }
+
+    function isManager() {
+      return isAuthenticated()
+        && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'manager';
+    }
+
+    function isAdminOrManager() {
+      return isAdmin() || isManager();
+    }
+
+    // ── Contacts ──────────────────────────────────────
+    match /contacts/{contactId} {
+      allow read, write: if isAdminOrManager();
+    }
+
+    // ── Events ────────────────────────────────────────
+    match /events/{eventId} {
+      allow read: if true; // Public can view published events
+      allow write: if isAdminOrManager();
+
+      match /registrations/{registrationId} {
+        allow read: if isAdminOrManager();
+        allow create: if true; // Public can register
+      }
+
+      match /surveys/{surveyId} {
+        allow read: if true;
+        allow write: if isAdminOrManager();
+      }
+
+      match /surveyResponses/{responseId} {
+        allow read: if isAdminOrManager();
+        allow create: if true; // Public can submit responses
+      }
+    }
+
+    // ── Messages ──────────────────────────────────────
+    match /messages/{messageId} {
+      allow read, write: if isAdminOrManager();
+    }
+
+    // ── Templates ─────────────────────────────────────
+    match /templates/{templateId} {
+      allow read, write: if isAdminOrManager();
+    }
+
+    // ── Surveys ───────────────────────────────────────
+    match /surveys/{surveyId} {
+      allow read: if true;
+      allow write: if isAdminOrManager();
+    }
+
+    // ── Suppression ───────────────────────────────────
+    match /suppression/{recordId} {
+      allow read, write: if isAdminOrManager();
+    }
+
+    // ── Prospects ─────────────────────────────────────
+    match /prospects/{prospectId} {
+      allow read, write: if isAdminOrManager();
+
+      match /conversations/{messageId} {
+        allow read, write: if isAdminOrManager();
+      }
+    }
+
+    // ── Playbooks ─────────────────────────────────────
+    match /playbooks/{playbookId} {
+      allow read: if isAdminOrManager();
+      allow write: if isAdmin();
+    }
+
+    // ── Skills ────────────────────────────────────────
+    match /skills/{skillId} {
+      allow read: if isAdminOrManager();
+      allow write: if isAdmin();
+    }
+
+    // ── Users ─────────────────────────────────────────
+    match /users/{userId} {
+      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // ── Logs ──────────────────────────────────────────
+    match /logs/{logId} {
+      allow read: if isAdminOrManager();
+      allow create: if isAdminOrManager();
+    }
+
+    // ── Pending Requests ──────────────────────────────
+    match /pendingRequests/{requestId} {
+      allow read, write: if isAdminOrManager();
+      allow create: if true; // Public can submit signup requests
+    }
+  }
+}
