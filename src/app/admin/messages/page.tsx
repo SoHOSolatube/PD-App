@@ -39,9 +39,10 @@ import {
 } from '@/lib/services/messageService';
 import { broadcastMessage } from '@/lib/services/deliveryService';
 import { getAllTemplates } from '@/lib/services/templateService';
+import { getAllSurveys } from '@/lib/services/surveyService';
 import { getCategories, type Category } from '@/lib/services/settingsService';
 import { useAuth } from '@/context/AuthContext';
-import type { Message, MessageChannel, AudienceTarget } from '@/types';
+import type { Message, MessageChannel, AudienceTarget, Survey } from '@/types';
 import type { Template } from '@/types';
 import { toast } from 'sonner';
 import {
@@ -59,6 +60,7 @@ import {
   CalendarClock,
   BarChart3,
   Radio,
+  ClipboardList,
 } from 'lucide-react';
 
 export default function MessagesPage() {
@@ -67,6 +69,7 @@ export default function MessagesPage() {
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState<Category[]>([]);
   const [templates, setTemplates] = useState<Template[]>([]);
+  const [surveys, setSurveys] = useState<Survey[]>([]);
 
   // Compose state
   const [channel, setChannel] = useState<MessageChannel>('sms');
@@ -82,14 +85,16 @@ export default function MessagesPage() {
 
   const loadData = useCallback(async () => {
     try {
-      const [msgs, cats, tmpls] = await Promise.all([
+      const [msgs, cats, tmpls, surveyData] = await Promise.all([
         getAllMessages(),
         getCategories(),
         getAllTemplates(),
+        getAllSurveys('active'),
       ]);
       setMessages(msgs);
       setCategories(cats);
       setTemplates(tmpls);
+      setSurveys(surveyData);
     } catch (error) {
       console.error('Error loading messages:', error);
     } finally {
@@ -337,7 +342,47 @@ export default function MessagesPage() {
                       </div>
                     </>
                   )}
-                </CardContent>
+
+                  {/* Survey link insertion */}
+                  {surveys.length > 0 && (
+                    <div className="space-y-2">
+                      <Label className="flex items-center gap-2">
+                        <ClipboardList className="h-3.5 w-3.5" />
+                        Attach Survey Link
+                      </Label>
+                      <Select
+                        onValueChange={(surveyId) => {
+                          const survey = surveys.find((s) => s.id === surveyId);
+                          if (!survey) return;
+                          const surveyUrl = `${typeof window !== 'undefined' ? window.location.origin : ''}/surveys/${survey.id}`;
+                          if (channel !== 'email') {
+                            setSmsContent((prev) =>
+                              prev ? `${prev}\n\nTake our survey: ${surveyUrl}` : `Take our survey: ${surveyUrl}`
+                            );
+                          }
+                          if (channel !== 'sms') {
+                            setEmailHtml((prev) =>
+                              prev
+                                ? `${prev}\n<p><a href="${surveyUrl}">Take our survey: ${survey.title}</a></p>`
+                                : `<p><a href="${surveyUrl}">Take our survey: ${survey.title}</a></p>`
+                            );
+                          }
+                          toast.success(`Survey link for "${survey.title}" inserted`);
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select a survey to insert…" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {surveys.map((s) => (
+                            <SelectItem key={s.id} value={s.id}>
+                              {s.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}                </CardContent>
               </Card>
             </div>
 

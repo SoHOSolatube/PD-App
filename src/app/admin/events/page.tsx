@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -50,14 +51,14 @@ import {
   Loader2,
   Calendar,
   Repeat,
+  ExternalLink,
 } from 'lucide-react';
 
 export default function EventsPage() {
+  const router = useRouter();
   const { user } = useAuth();
   const [events, setEvents] = useState<PDEvent[]>([]);
   const [loading, setLoading] = useState(true);
-  const [dialogOpen, setDialogOpen] = useState(false);
-  const [editingEvent, setEditingEvent] = useState<PDEvent | null>(null);
   const [selectedEvent, setSelectedEvent] = useState<PDEvent | null>(null);
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [seqSteps, setSeqSteps] = useState<NotificationStep[]>([]);
@@ -89,36 +90,7 @@ export default function EventsPage() {
     }
   };
 
-  const handleCreate = async (data: {
-    title: string;
-    description: string;
-    dateTime: Date;
-    recurrence: RecurrencePattern;
-  }) => {
-    await createEvent({
-      ...data,
-      status: 'draft',
-      notificationSequence: [],
-      createdBy: user?.uid || '',
-    });
-    toast.success('Event created');
-    loadEvents();
-  };
 
-  const handleEdit = async (data: {
-    title: string;
-    description: string;
-    dateTime: Date;
-    recurrence: RecurrencePattern;
-  }) => {
-    if (!editingEvent) return;
-    await updateEvent(editingEvent.id, data);
-    toast.success('Event updated');
-    loadEvents();
-    if (selectedEvent?.id === editingEvent.id) {
-      selectEvent({ ...editingEvent, ...data });
-    }
-  };
 
   const handlePublish = async (event: PDEvent) => {
     if (event.status === 'published') {
@@ -191,17 +163,24 @@ export default function EventsPage() {
             Create and manage events, registrations, and notifications.
           </p>
         </div>
-        <Button
-          onClick={() => {
-            setEditingEvent(null);
-            setDialogOpen(true);
-          }}
-          style={{ backgroundColor: 'var(--solatube-blue)' }}
-          className="gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          New Event
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            className="gap-2"
+            onClick={() => window.open('/events', '_blank')}
+          >
+            <ExternalLink className="h-4 w-4" />
+            View Events Live
+          </Button>
+          <Button
+            onClick={() => router.push('/admin/events/new')}
+            style={{ backgroundColor: 'var(--solatube-blue)' }}
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            New Event
+          </Button>
+        </div>
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
@@ -270,8 +249,7 @@ export default function EventsPage() {
                             <DropdownMenuItem
                               onClick={(e) => {
                                 e.stopPropagation();
-                                setEditingEvent(event);
-                                setDialogOpen(true);
+                                router.push(`/admin/events/${event.id}/edit`);
                               }}
                             >
                               <Pencil className="mr-2 h-3.5 w-3.5" />
@@ -386,13 +364,6 @@ export default function EventsPage() {
         </div>
       </div>
 
-      {/* Create/Edit Dialog */}
-      <EventDialog
-        open={dialogOpen}
-        onOpenChange={setDialogOpen}
-        event={editingEvent}
-        onSave={editingEvent ? handleEdit : handleCreate}
-      />
     </div>
   );
 }

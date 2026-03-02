@@ -1,6 +1,7 @@
 ﻿'use client';
 
 import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -44,12 +45,14 @@ import {
   ArrowUpDown,
   Filter,
   X,
+  Phone,
 } from 'lucide-react';
 
 type SortField = 'name' | 'email' | 'createdAt';
 type SortDir = 'asc' | 'desc';
 
 export default function ContactsPage() {
+  const router = useRouter();
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
@@ -336,6 +339,14 @@ export default function ContactsPage() {
                               <MessageSquare className="mr-2 h-3.5 w-3.5" />
                               Notes ({contact.notes.length})
                             </DropdownMenuItem>
+                            {contact.phone && (
+                              <DropdownMenuItem
+                                onClick={() => router.push(`/admin/sms-inbox?phone=${encodeURIComponent(contact.phone)}`)}
+                              >
+                                <Phone className="mr-2 h-3.5 w-3.5" />
+                                SMS History
+                              </DropdownMenuItem>
+                            )}
                             <DropdownMenuItem
                               onClick={() => handleDelete(contact)}
                               className="text-destructive focus:text-destructive"

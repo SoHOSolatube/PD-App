@@ -9,61 +9,91 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { addRegistration, getEventById } from '@/lib/services/eventService';
 import { createContact, searchByPhone } from '@/lib/services/contactService';
 import { toast } from 'sonner';
-import { CheckCircle2, CalendarDays, ArrowLeft } from 'lucide-react';
+import { CheckCircle2, CalendarDays, ArrowLeft, Phone, User, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+
+type Step = 'phone' | 'recognized' | 'new' | 'done';
 
 export default function RegisterPage() {
     const params = useParams();
     const eventId = params.id as string;
+
+    const [step, setStep] = useState<Step>('phone');
+    const [phone, setPhone] = useState('');
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [phone, setPhone] = useState('');
     const [company, setCompany] = useState('');
-    const [submitting, setSubmitting] = useState(false);
-    const [done, setDone] = useState(false);
+    const [foundContactId, setFoundContactId] = useState('');
+    const [foundName, setFoundName] = useState('');
+    const [loading, setLoading] = useState(false);
 
-    const handleSubmit = async (e: React.FormEvent) => {
-        e.preventDefault();
-        if (!name.trim() || !email.trim()) return;
-        setSubmitting(true);
-
+    const handlePhoneLookup = async () => {
+        if (!phone.trim()) return;
+        setLoading(true);
         try {
             const event = await getEventById(eventId);
             if (!event) {
                 toast.error('Event not found');
+                setLoading(false);
                 return;
             }
 
-            let contactId: string;
-            const existing = phone ? await searchByPhone(phone) : null;
-            if (existing) {
-                contactId = existing.id;
+            const contact = await searchByPhone(phone.trim());
+            if (contact) {
+                setFoundContactId(contact.id);
+                setFoundName(contact.name);
+                setStep('recognized');
             } else {
-                contactId = await createContact({
-                    name: name.trim(),
-                    email: email.trim(),
-                    phone: phone.trim() || '',
-                    company: company.trim() || '',
-                    categories: [],
-                    status: 'active',
-                    optOutSms: false,
-                    optOutEmail: false,
-                });
+                setStep('new');
             }
-
-            // Add registration
-            await addRegistration(eventId, contactId, name.trim());
-            setDone(true);
-            toast.success('Registered successfully!');
-        } catch (error) {
-            console.error('Registration error:', error);
-            toast.error('Registration failed. Please try again.');
+        } catch (err) {
+            console.error(err);
+            toast.error('Lookup failed');
         } finally {
-            setSubmitting(false);
+            setLoading(false);
         }
     };
 
-    if (done) {
+    const handleQuickRegister = async () => {
+        setLoading(true);
+        try {
+            await addRegistration(eventId, foundContactId, foundName);
+            setStep('done');
+            toast.success('Registered successfully!');
+        } catch (err) {
+            console.error(err);
+            toast.error('Registration failed');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleNewRegister = async () => {
+        if (!name.trim() || !email.trim()) return;
+        setLoading(true);
+        try {
+            const contactId = await createContact({
+                name: name.trim(),
+                email: email.trim(),
+                phone: phone.trim(),
+                company: company.trim(),
+                categories: [],
+                status: 'active',
+                optOutSms: false,
+                optOutEmail: false,
+            });
+            await addRegistration(eventId, contactId, name.trim());
+            setStep('done');
+            toast.success('Registration submitted!');
+        } catch (err) {
+            console.error(err);
+            toast.error('Registration failed');
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    if (step === 'done') {
         return (
             <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 p-6">
                 <Card className="w-full max-w-md text-center">
@@ -73,13 +103,56 @@ export default function RegisterPage() {
                         <p className="mt-2 text-muted-foreground">
                             Thank you for registering. We&apos;ll send you updates as the event approaches.
                         </p>
-                        <Link
-                            href="/events"
-                            className="mt-6 inline-flex items-center gap-2 text-sm text-[#0082c4] hover:underline"
-                        >
+                        <Link href="/events" className="mt-6 inline-flex items-center gap-2 text-sm text-[#0082c4] hover:underline">
                             <ArrowLeft className="h-4 w-4" />
                             Back to Events
                         </Link>
+                    </CardContent>
+                </Card>
+            </div>
+        );
+    }
+
+    if (step === 'recognized') {
+        return (
+            <div className="flex min-h-screen items-center justify-center bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900 p-6">
+                <Card className="w-full max-w-md">
+                    <CardHeader>
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground mb-2">
+                            <CalendarDays className="h-4 w-4" />
+                            Event Registration
+                        </div>
+                        <CardTitle>Welcome Back!</CardTitle>
+                        <CardDescription>
+                            We found your account. Register with one click.
+                        </CardDescription>
+                    </CardHeader>
+                    <CardContent className="space-y-4">
+                        <div className="rounded-lg border bg-muted/50 p-4 flex items-center gap-3">
+                            <User className="h-8 w-8 text-muted-foreground" />
+                            <div>
+                                <p className="font-medium">{foundName}</p>
+                                <p className="text-sm text-muted-foreground">{phone}</p>
+                            </div>
+                        </div>
+                        <Button
+                            onClick={handleQuickRegister}
+                            className="w-full"
+                            style={{ backgroundColor: '#0082c4' }}
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Registering…</>
+                            ) : (
+                                'Register Now'
+                            )}
+                        </Button>
+                        <button
+                            onClick={() => setStep('phone')}
+                            className="w-full text-sm text-muted-foreground hover:underline"
+                        >
+                            Not you? Go back
+                        </button>
                     </CardContent>
                 </Card>
             </div>
@@ -94,62 +167,87 @@ export default function RegisterPage() {
                         <CalendarDays className="h-4 w-4" />
                         Event Registration
                     </div>
-                    <CardTitle>Register Now</CardTitle>
+                    <CardTitle>{step === 'phone' ? 'Enter Your Phone' : 'Complete Registration'}</CardTitle>
                     <CardDescription>
-                        Fill out the form below to register for this event.
+                        {step === 'phone'
+                            ? 'Start by entering your phone number so we can look up your account.'
+                            : 'Please fill in your details to register for this event.'}
                     </CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <form onSubmit={handleSubmit} className="space-y-4">
-                        <div className="space-y-2">
-                            <Label htmlFor="reg-name">Name *</Label>
-                            <Input
-                                id="reg-name"
-                                value={name}
-                                onChange={(e) => setName(e.target.value)}
-                                placeholder="Your full name"
-                                required
-                            />
+                    {step === 'phone' ? (
+                        <div className="space-y-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="reg-phone">Phone Number *</Label>
+                                <div className="flex gap-2">
+                                    <div className="relative flex-1">
+                                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                                        <Input
+                                            id="reg-phone"
+                                            type="tel"
+                                            value={phone}
+                                            onChange={(e) => setPhone(e.target.value)}
+                                            placeholder="+1 555-0100"
+                                            className="pl-10"
+                                            onKeyDown={(e) => e.key === 'Enter' && handlePhoneLookup()}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <Button
+                                onClick={handlePhoneLookup}
+                                className="w-full"
+                                style={{ backgroundColor: '#0082c4' }}
+                                disabled={loading || !phone.trim()}
+                            >
+                                {loading ? (
+                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Looking up…</>
+                                ) : (
+                                    'Continue'
+                                )}
+                            </Button>
                         </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="reg-email">Email *</Label>
-                            <Input
-                                id="reg-email"
-                                type="email"
-                                value={email}
-                                onChange={(e) => setEmail(e.target.value)}
-                                placeholder="you@company.com"
-                                required
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="reg-phone">Phone</Label>
-                            <Input
-                                id="reg-phone"
-                                type="tel"
-                                value={phone}
-                                onChange={(e) => setPhone(e.target.value)}
-                                placeholder="+1 555-0100"
-                            />
-                        </div>
-                        <div className="space-y-2">
-                            <Label htmlFor="reg-company">Company</Label>
-                            <Input
-                                id="reg-company"
-                                value={company}
-                                onChange={(e) => setCompany(e.target.value)}
-                                placeholder="Your dealership name"
-                            />
-                        </div>
-                        <Button
-                            type="submit"
-                            className="w-full"
-                            style={{ backgroundColor: '#0082c4' }}
-                            disabled={submitting || !name.trim() || !email.trim()}
+                    ) : (
+                        <form
+                            onSubmit={(e) => { e.preventDefault(); handleNewRegister(); }}
+                            className="space-y-4"
                         >
-                            {submitting ? 'Registering…' : 'Register'}
-                        </Button>
-                    </form>
+                            <p className="text-sm text-muted-foreground bg-muted/50 rounded-lg p-3">
+                                Phone: <strong>{phone}</strong> — no existing account found. Please complete the form below.
+                            </p>
+                            <div className="space-y-2">
+                                <Label htmlFor="reg-name">Name *</Label>
+                                <Input id="reg-name" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="reg-email">Email *</Label>
+                                <Input id="reg-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="you@company.com" required />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="reg-company">Dealership / Company</Label>
+                                <Input id="reg-company" value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Your dealership name" />
+                            </div>
+                            <Button
+                                type="submit"
+                                className="w-full"
+                                style={{ backgroundColor: '#0082c4' }}
+                                disabled={loading || !name.trim() || !email.trim()}
+                            >
+                                {loading ? (
+                                    <><Loader2 className="mr-2 h-4 w-4 animate-spin" />Submitting…</>
+                                ) : (
+                                    'Register'
+                                )}
+                            </Button>
+                            <button
+                                type="button"
+                                onClick={() => setStep('phone')}
+                                className="w-full text-sm text-muted-foreground hover:underline"
+                            >
+                                ← Back to phone entry
+                            </button>
+                        </form>
+                    )}
                 </CardContent>
             </Card>
         </div>

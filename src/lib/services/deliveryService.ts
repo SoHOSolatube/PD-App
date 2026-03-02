@@ -4,21 +4,63 @@ import {
     updateMessage,
     updateAnalytics,
 } from '@/lib/services/messageService';
+import { getApiSettings } from '@/lib/services/settingsService';
 import type { Contact } from '@/types';
 
 /**
- * Delivery Service (Stubbed)
+ * Delivery Service
  *
- * Currently logs to console instead of calling Twilio/SendGrid.
- * When API keys are configured in Settings, these stubs will be
- * replaced with actual API calls.
+ * Sends SMS via Twilio and email via SendGrid when API keys are configured.
+ * Falls back to console logging when keys are absent.
  */
 
+let _cachedSettings: Awaited<ReturnType<typeof getApiSettings>> | null = null;
+let _cacheTime = 0;
+
+async function getSettings() {
+    // Cache for 60 seconds to avoid excessive Firestore reads during batch sends
+    if (_cachedSettings && Date.now() - _cacheTime < 60_000) return _cachedSettings;
+    _cachedSettings = await getApiSettings();
+    _cacheTime = Date.now();
+    return _cachedSettings;
+}
+
 export async function sendSms(to: string, content: string): Promise<boolean> {
-    // TODO: Replace with Twilio API call when configured
-    console.log(`[SMS STUB] To: ${to} | Content: ${content.slice(0, 50)}…`);
-    // Simulate 95% success rate
-    return Math.random() > 0.05;
+    const settings = await getSettings();
+    const { accountSid, authToken, fromNumber } = settings.twilio;
+
+    if (!accountSid || !authToken || !fromNumber) {
+        console.log(`[SMS STUB] To: ${to} | Content: ${content.slice(0, 50)}…`);
+        return Math.random() > 0.05;
+    }
+
+    try {
+        const url = `https://api.twilio.com/2010-04-01/Accounts/${accountSid}/Messages.json`;
+        const body = new URLSearchParams({
+            To: to,
+            From: fromNumber,
+            Body: content,
+        });
+
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Basic ' + btoa(`${accountSid}:${authToken}`),
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: body.toString(),
+        });
+
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            console.error('[SMS ERROR]', err);
+            return false;
+        }
+        return true;
+    } catch (err) {
+        console.error('[SMS ERROR]', err);
+        return false;
+    }
 }
 
 export async function sendEmail(
@@ -26,14 +68,44 @@ export async function sendEmail(
     subject: string,
     html: string
 ): Promise<boolean> {
-    // TODO: Replace with SendGrid API call when configured
-    console.log(`[EMAIL STUB] To: ${to} | Subject: ${subject}`);
-    return Math.random() > 0.05;
+    const settings = await getSettings();
+    const { apiKey, fromEmail } = settings.sendgrid;
+
+    if (!apiKey || !fromEmail) {
+        console.log(`[EMAIL STUB] To: ${to} | Subject: ${subject}`);
+        return Math.random() > 0.05;
+    }
+
+    try {
+        const res = await fetch('https://api.sendgrid.com/v3/mail/send', {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${apiKey}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                personalizations: [{ to: [{ email: to }] }],
+                from: { email: fromEmail },
+                subject,
+                content: [{ type: 'text/html', value: html }],
+            }),
+        });
+
+        if (!res.ok) {
+            const err = await res.text().catch(() => '');
+            console.error('[EMAIL ERROR]', res.status, err);
+            return false;
+        }
+        return true;
+    } catch (err) {
+        console.error('[EMAIL ERROR]', err);
+        return false;
+    }
 }
 
 /**
  * Broadcast a message to its audience.
- * Resolves audience → loops contacts → calls send stubs → updates analytics.
+ * Resolves audience → loops contacts → calls send → updates analytics.
  */
 export async function broadcastMessage(messageId: string): Promise<void> {
     const message = await getMessageById(messageId);
@@ -61,7 +133,7 @@ export async function broadcastMessage(messageId: string): Promise<void> {
             const ok = await sendEmail(
                 contact.email,
                 message.subject || 'Message from Solatube',
-                message.emailHtml || ''
+                replaceMergeTags(message.emailHtml || '', contact)
             );
             if (ok) emailDelivered++;
         }

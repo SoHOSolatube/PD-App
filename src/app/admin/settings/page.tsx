@@ -14,6 +14,12 @@ import {
     getCategories,
     setCategories as saveCategories,
     type Category,
+    getApiSettings,
+    setApiSettings,
+    type ApiSettings,
+    getProspectTags,
+    setProspectTags as saveProspectTags,
+    type ProspectTag,
 } from '@/lib/services/settingsService';
 import {
     getAllSkills,
@@ -76,11 +82,7 @@ export default function SettingsPage() {
                 </TabsContent>
 
                 <TabsContent value="prospect-tags">
-                    <PlaceholderTab
-                        title="Prospect Tags"
-                        description="Create and manage tags for prospect categorization."
-                        phase={8}
-                    />
+                    <ProspectTagsTab />
                 </TabsContent>
 
                 <TabsContent value="skills">
@@ -93,14 +95,58 @@ export default function SettingsPage() {
 
 function ApiConnectionsTab() {
     const [saving, setSaving] = useState(false);
+    const [loading, setLoading] = useState(true);
+    const [settings, setSettings] = useState<ApiSettings>({
+        twilio: { accountSid: '', authToken: '', fromNumber: '' },
+        sendgrid: { apiKey: '', fromEmail: '' },
+        openai: { apiKey: '', model: 'gpt-4o' },
+    });
+
+    useEffect(() => {
+        getApiSettings().then((s) => {
+            setSettings(s);
+            setLoading(false);
+        });
+    }, []);
+
+    const update = (section: keyof ApiSettings, field: string, value: string) => {
+        setSettings((prev) => ({
+            ...prev,
+            [section]: { ...prev[section], [field]: value },
+        }));
+    };
 
     const handleSave = async () => {
         setSaving(true);
-        // TODO: Save to Firestore settings collection
-        await new Promise((r) => setTimeout(r, 500));
-        toast.success('API settings saved');
-        setSaving(false);
+        try {
+            await setApiSettings(settings);
+            toast.success('API settings saved');
+        } catch {
+            toast.error('Failed to save settings');
+        } finally {
+            setSaving(false);
+        }
     };
+
+    const connBadge = (fields: string[]) => {
+        const connected = fields.every((f) => f.trim().length > 0);
+        return (
+            <Badge variant={connected ? 'default' : 'outline'}
+                className={connected ? 'bg-green-600 hover:bg-green-700' : ''}>
+                {connected ? 'Connected' : 'Not Connected'}
+            </Badge>
+        );
+    };
+
+    if (loading) {
+        return (
+            <Card>
+                <CardContent className="flex h-32 items-center justify-center">
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                </CardContent>
+            </Card>
+        );
+    }
 
     return (
         <div className="space-y-6">
@@ -114,27 +160,30 @@ function ApiConnectionsTab() {
                                 Configure Twilio for sending and receiving SMS.
                             </CardDescription>
                         </div>
-                        <Badge variant="outline">Not Connected</Badge>
+                        {connBadge([settings.twilio.accountSid, settings.twilio.authToken, settings.twilio.fromNumber])}
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor="twilio-sid">Account SID</Label>
-                            <Input id="twilio-sid" placeholder="AC..." type="password" />
+                            <Input id="twilio-sid" placeholder="AC..."
+                                value={settings.twilio.accountSid}
+                                onChange={(e) => update('twilio', 'accountSid', e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="twilio-token">Auth Token</Label>
-                            <Input id="twilio-token" placeholder="••••••••" type="password" />
+                            <Input id="twilio-token" placeholder="••••••••" type="password"
+                                value={settings.twilio.authToken}
+                                onChange={(e) => update('twilio', 'authToken', e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="twilio-from">From Phone Number</Label>
-                            <Input id="twilio-from" placeholder="+1..." />
+                            <Input id="twilio-from" placeholder="+1..."
+                                value={settings.twilio.fromNumber}
+                                onChange={(e) => update('twilio', 'fromNumber', e.target.value)} />
                         </div>
                     </div>
-                    <Button variant="outline" size="sm" disabled>
-                        Test Connection
-                    </Button>
                 </CardContent>
             </Card>
 
@@ -148,23 +197,24 @@ function ApiConnectionsTab() {
                                 Configure SendGrid for sending emails.
                             </CardDescription>
                         </div>
-                        <Badge variant="outline">Not Connected</Badge>
+                        {connBadge([settings.sendgrid.apiKey, settings.sendgrid.fromEmail])}
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor="sg-key">API Key</Label>
-                            <Input id="sg-key" placeholder="SG...." type="password" />
+                            <Input id="sg-key" placeholder="SG...." type="password"
+                                value={settings.sendgrid.apiKey}
+                                onChange={(e) => update('sendgrid', 'apiKey', e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="sg-from">From Email</Label>
-                            <Input id="sg-from" placeholder="noreply@solatube.com" />
+                            <Input id="sg-from" placeholder="noreply@solatube.com"
+                                value={settings.sendgrid.fromEmail}
+                                onChange={(e) => update('sendgrid', 'fromEmail', e.target.value)} />
                         </div>
                     </div>
-                    <Button variant="outline" size="sm" disabled>
-                        Test Connection
-                    </Button>
                 </CardContent>
             </Card>
 
@@ -178,23 +228,24 @@ function ApiConnectionsTab() {
                                 Configure OpenAI for AI-powered features.
                             </CardDescription>
                         </div>
-                        <Badge variant="outline">Not Connected</Badge>
+                        {connBadge([settings.openai.apiKey])}
                     </div>
                 </CardHeader>
                 <CardContent className="space-y-4">
                     <div className="grid gap-4 sm:grid-cols-2">
                         <div className="space-y-2">
                             <Label htmlFor="openai-key">API Key</Label>
-                            <Input id="openai-key" placeholder="sk-..." type="password" />
+                            <Input id="openai-key" placeholder="sk-..." type="password"
+                                value={settings.openai.apiKey}
+                                onChange={(e) => update('openai', 'apiKey', e.target.value)} />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="openai-model">Model</Label>
-                            <Input id="openai-model" placeholder="gpt-4o" defaultValue="gpt-4o" />
+                            <Input id="openai-model" placeholder="gpt-4o"
+                                value={settings.openai.model}
+                                onChange={(e) => update('openai', 'model', e.target.value)} />
                         </div>
                     </div>
-                    <Button variant="outline" size="sm" disabled>
-                        Test Connection
-                    </Button>
                 </CardContent>
             </Card>
 
@@ -596,25 +647,192 @@ function SkillsTab() {
     );
 }
 
-function PlaceholderTab({
-    title,
-    description,
-    phase,
-}: {
-    title: string;
-    description: string;
-    phase: number;
-}) {
+function ProspectTagsTab() {
+    const [tags, setTagsState] = useState<ProspectTag[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [newName, setNewName] = useState('');
+    const [newColor, setNewColor] = useState('#6366f1');
+    const [editingId, setEditingId] = useState<string | null>(null);
+    const [editName, setEditName] = useState('');
+    const [editColor, setEditColor] = useState('');
+
+    useEffect(() => {
+        getProspectTags().then((t) => {
+            setTagsState(t);
+            setLoading(false);
+        });
+    }, []);
+
+    const save = async (updated: ProspectTag[]) => {
+        setTagsState(updated);
+        await saveProspectTags(updated);
+    };
+
+    const handleAdd = async () => {
+        if (!newName.trim()) return;
+        const tag: ProspectTag = {
+            id: crypto.randomUUID(),
+            name: newName.trim(),
+            color: newColor,
+        };
+        await save([...tags, tag]);
+        setNewName('');
+        toast.success('Tag added');
+    };
+
+    const handleDelete = async (id: string) => {
+        await save(tags.filter((t) => t.id !== id));
+        toast.success('Tag deleted');
+    };
+
+    const startEdit = (tag: ProspectTag) => {
+        setEditingId(tag.id);
+        setEditName(tag.name);
+        setEditColor(tag.color);
+    };
+
+    const handleSaveEdit = async () => {
+        if (!editingId || !editName.trim()) return;
+        await save(
+            tags.map((t) =>
+                t.id === editingId
+                    ? { ...t, name: editName.trim(), color: editColor }
+                    : t
+            )
+        );
+        setEditingId(null);
+        toast.success('Tag updated');
+    };
+
+    if (loading) {
+        return (
+            <Card>
+                <CardContent className="flex h-32 items-center justify-center">
+                    <div className="h-5 w-5 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+                </CardContent>
+            </Card>
+        );
+    }
+
     return (
         <Card>
             <CardHeader>
-                <CardTitle>{title}</CardTitle>
-                <CardDescription>{description}</CardDescription>
+                <CardTitle>Prospect Tags</CardTitle>
+                <CardDescription>
+                    Create and manage tags for categorizing recruitment prospects.
+                </CardDescription>
             </CardHeader>
-            <CardContent>
-                <div className="rounded-lg border border-dashed border-border p-12 text-center">
-                    <p className="text-sm text-muted-foreground">Coming in Phase {phase}</p>
+            <CardContent className="space-y-4">
+                {/* Add New */}
+                <div className="flex items-end gap-3">
+                    <div className="flex-1 space-y-1">
+                        <Label htmlFor="tag-name">Tag Name</Label>
+                        <Input
+                            id="tag-name"
+                            value={newName}
+                            onChange={(e) => setNewName(e.target.value)}
+                            placeholder="e.g. Hot Lead"
+                            onKeyDown={(e) => e.key === 'Enter' && handleAdd()}
+                        />
+                    </div>
+                    <div className="space-y-1">
+                        <Label htmlFor="tag-color">Color</Label>
+                        <input
+                            id="tag-color"
+                            type="color"
+                            value={newColor}
+                            onChange={(e) => setNewColor(e.target.value)}
+                            className="h-10 w-12 cursor-pointer rounded border"
+                        />
+                    </div>
+                    <Button onClick={handleAdd} disabled={!newName.trim()} className="gap-1">
+                        <Plus className="h-4 w-4" />
+                        Add
+                    </Button>
                 </div>
+
+                <Separator />
+
+                {/* Tag List */}
+                {tags.length === 0 ? (
+                    <p className="py-4 text-center text-sm text-muted-foreground">
+                        No prospect tags yet.
+                    </p>
+                ) : (
+                    <div className="space-y-2">
+                        {tags.map((tag) => (
+                            <div
+                                key={tag.id}
+                                className="flex items-center justify-between rounded-lg border px-4 py-2"
+                            >
+                                {editingId === tag.id ? (
+                                    <div className="flex flex-1 items-center gap-2">
+                                        <input
+                                            type="color"
+                                            value={editColor}
+                                            onChange={(e) => setEditColor(e.target.value)}
+                                            className="h-7 w-9 cursor-pointer rounded border"
+                                        />
+                                        <Input
+                                            value={editName}
+                                            onChange={(e) => setEditName(e.target.value)}
+                                            className="h-8"
+                                            onKeyDown={(e) =>
+                                                e.key === 'Enter' && handleSaveEdit()
+                                            }
+                                        />
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            className="h-7 w-7"
+                                            onClick={handleSaveEdit}
+                                        >
+                                            <Check className="h-3.5 w-3.5" />
+                                        </Button>
+                                        <Button
+                                            size="icon"
+                                            variant="ghost"
+                                            className="h-7 w-7"
+                                            onClick={() => setEditingId(null)}
+                                        >
+                                            <X className="h-3.5 w-3.5" />
+                                        </Button>
+                                    </div>
+                                ) : (
+                                    <>
+                                        <div className="flex items-center gap-3">
+                                            <div
+                                                className="h-4 w-4 rounded-full"
+                                                style={{ backgroundColor: tag.color }}
+                                            />
+                                            <span className="text-sm font-medium">
+                                                {tag.name}
+                                            </span>
+                                        </div>
+                                        <div className="flex gap-1">
+                                            <Button
+                                                size="icon"
+                                                variant="ghost"
+                                                className="h-7 w-7"
+                                                onClick={() => startEdit(tag)}
+                                            >
+                                                <Pencil className="h-3.5 w-3.5" />
+                                            </Button>
+                                            <Button
+                                                size="icon"
+                                                variant="ghost"
+                                                className="h-7 w-7 text-destructive hover:text-destructive"
+                                                onClick={() => handleDelete(tag.id)}
+                                            >
+                                                <Trash2 className="h-3.5 w-3.5" />
+                                            </Button>
+                                        </div>
+                                    </>
+                                )}
+                            </div>
+                        ))}
+                    </div>
+                )}
             </CardContent>
         </Card>
     );

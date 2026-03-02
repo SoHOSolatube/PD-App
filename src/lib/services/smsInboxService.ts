@@ -15,6 +15,7 @@ import {
     limit,
 } from 'firebase/firestore';
 import { db } from '@/lib/firebase/config';
+import { sendSms } from '@/lib/services/deliveryService';
 
 // ── Types ──
 
@@ -132,7 +133,8 @@ export async function sendReply(conversationId: string, phone: string, text: str
         direction: 'outbound',
     });
 
-    console.log(`[SMS REPLY STUB] To: ${phone} — "${text}"`);
+    // Actually send the SMS via Twilio (or stub if no keys)
+    await sendSms(phone, text);
 }
 
 // ── Mark Read ──

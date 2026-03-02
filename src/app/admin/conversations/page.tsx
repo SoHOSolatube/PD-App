@@ -163,8 +163,66 @@ export default function ConversationsPage() {
     toast.success(`Advanced to step ${updated.currentPlaybookStep}`);
   };
 
-  // ── Copilot suggestions ──
-  const getCopilotSuggestions = (step: number): string[] => {
+  // ── Copilot suggestions (AI-powered) ──
+  const [copilotSuggestions, setCopilotSuggestions] = useState<string[]>([]);
+  const [copilotLoading, setCopilotLoading] = useState(false);
+
+  const fetchCopilotSuggestions = useCallback(async () => {
+    if (!selected || messages.length === 0) {
+      setCopilotSuggestions(getStaticSuggestions(selected?.currentPlaybookStep || 0));
+      return;
+    }
+    setCopilotLoading(true);
+    try {
+      const res = await fetch('/api/ai/conversation', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          prospectId: selected.id,
+          playbookStep: selected.currentPlaybookStep,
+          history: messages.slice(-6),
+          mode: 'copilot',
+        }),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        // Parse numbered suggestions from the response
+        const lines = (data.response || '').split('\n').filter((l: string) => l.trim());
+        const parsed = lines
+          .map((l: string) => l.replace(/^\d+\.\s*/, '').replace(/^["']|["']$/g, '').trim())
+          .filter((l: string) => l.length > 10 && !l.startsWith('💡'));
+        setCopilotSuggestions(parsed.length > 0 ? parsed.slice(0, 4) : getStaticSuggestions(selected.currentPlaybookStep));
+      } else {
+        setCopilotSuggestions(getStaticSuggestions(selected.currentPlaybookStep));
+      }
+    } catch {
+      setCopilotSuggestions(getStaticSuggestions(selected.currentPlaybookStep));
+    } finally {
+      setCopilotLoading(false);
+    }
+  }, [selected, messages]);
+
+  // Fetch suggestions when selected prospect or messages change
+  useEffect(() => {
+    fetchCopilotSuggestions();
+  }, [fetchCopilotSuggestions]);
+
+  // Auto-advance: every 3 prospect messages, advance playbook step
+  useEffect(() => {
+    if (!selected || selected.conversationMode !== 'auto') return;
+    const prospectMsgs = messages.filter((m) => m.sender === 'prospect');
+    if (prospectMsgs.length > 0 && prospectMsgs.length % 3 === 0) {
+      const expectedStep = Math.floor(prospectMsgs.length / 3);
+      if (expectedStep > selected.currentPlaybookStep && selected.currentPlaybookStep < 3) {
+        advancePlaybookStep(selected.id, selected.currentPlaybookStep);
+        const updated = { ...selected, currentPlaybookStep: selected.currentPlaybookStep + 1 };
+        setSelected(updated);
+        toast.info(`Auto-advanced to step ${updated.currentPlaybookStep}`);
+      }
+    }
+  }, [messages, selected]);
+
+  const getStaticSuggestions = (step: number): string[] => {
     const suggestions: Record<number, string[]> = {
       0: ['Ask about their business type', 'Inquire about service area', 'Ask about years of experience'],
       1: ['Ask about project volume', 'Discuss territory interest', 'Inquire about team size'],
@@ -470,15 +528,23 @@ export default function ConversationsPage() {
                     <Sparkles className="h-3 w-3 text-amber-500" /> Suggested Actions
                   </h4>
                   <div className="space-y-1.5">
-                    {getCopilotSuggestions(selected.currentPlaybookStep).map((suggestion, i) => (
-                      <button
-                        key={i}
-                        onClick={() => setReplyText(suggestion)}
-                        className="w-full rounded-md border border-dashed px-3 py-2 text-left text-[11px] text-muted-foreground hover:bg-muted/50 transition-colors"
-                      >
-                        {suggestion}
-                      </button>
-                    ))}
+                    {copilotLoading ? (
+                      <div className="flex items-center justify-center py-3">
+                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                      </div>
+                    ) : copilotSuggestions.length > 0 ? (
+                      copilotSuggestions.map((suggestion, i) => (
+                        <button
+                          key={i}
+                          onClick={() => setReplyText(suggestion)}
+                          className="w-full rounded-md border border-dashed px-3 py-2 text-left text-[11px] text-muted-foreground hover:bg-muted/50 transition-colors"
+                        >
+                          {suggestion}
+                        </button>
+                      ))
+                    ) : (
+                      <p className="text-[10px] text-muted-foreground">No suggestions available</p>
+                    )}
                   </div>
                 </div>
 
