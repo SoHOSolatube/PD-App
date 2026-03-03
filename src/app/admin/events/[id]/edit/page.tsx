@@ -194,7 +194,13 @@ export default function EditEventPage() {
                     <CardDescription>Automated messages before and after the event.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <NotificationSequenceBuilder steps={notificationSteps} onChange={setNotificationSteps} />
+                    <NotificationSequenceBuilder
+                        steps={notificationSteps}
+                        onChange={setNotificationSteps}
+                        eventId={eventId}
+                        eventTitle={title}
+                        eventDate={dateTime ? new Date(dateTime) : undefined}
+                    />
                 </CardContent>
             </Card>
 

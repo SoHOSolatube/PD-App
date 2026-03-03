@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
@@ -10,21 +10,60 @@ import {
     DropdownMenu,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuLabel,
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { ChevronDown, Eye, MessageSquare } from 'lucide-react';
+import {
+    Popover,
+    PopoverContent,
+    PopoverTrigger,
+} from '@/components/ui/popover';
+import {
+    ChevronDown,
+    Eye,
+    MessageSquare,
+    ClipboardList,
+    User,
+    Phone,
+    Mail,
+    Building2,
+    Calendar,
+    Tag,
+    Link2,
+    Loader2,
+} from 'lucide-react';
+import { getAllSurveys } from '@/lib/services/surveyService';
+import type { Survey } from '@/types';
 
 // ── SMS Constants ──
 const SMS_SEGMENT_SIZE = 160;
 const SMS_CONCAT_SEGMENT_SIZE = 153; // concatenated segments use 7 chars for UDH
 
-const MERGE_TAGS = [
-    { label: 'Name', value: '{{name}}' },
-    { label: 'Company', value: '{{company}}' },
-    { label: 'Email', value: '{{email}}' },
-    { label: 'Event Title', value: '{{eventTitle}}' },
-    { label: 'Event Date', value: '{{eventDate}}' },
-    { label: 'Survey Link', value: '{{surveyLink}}' },
+// Organized merge tag groups
+const CONTACT_TAGS = [
+    { label: 'Name', value: '{{name}}', icon: User },
+    { label: 'Phone', value: '{{phone}}', icon: Phone },
+    { label: 'Email', value: '{{email}}', icon: Mail },
+    { label: 'Company', value: '{{company}}', icon: Building2 },
+    { label: 'Categories', value: '{{categories}}', icon: Tag },
+];
+
+const EVENT_TAGS = [
+    { label: 'Event Title', value: '{{eventTitle}}', icon: Calendar },
+    { label: 'Event Date', value: '{{eventDate}}', icon: Calendar },
+    { label: 'Event Link', value: '{{eventLink}}', icon: Link2 },
+];
+
+const ALL_MERGE_TAGS = [...CONTACT_TAGS, ...EVENT_TAGS];
+
+// Quick-insert chips (the most commonly used ones)
+const QUICK_CHIPS = [
+    { label: 'Name', value: '{{name}}', icon: User },
+    { label: 'Phone', value: '{{phone}}', icon: Phone },
+    { label: 'Company', value: '{{company}}', icon: Building2 },
+    { label: 'Event', value: '{{eventTitle}}', icon: Calendar },
+    { label: 'Event Link', value: '{{eventLink}}', icon: Link2 },
 ];
 
 interface SmsTemplateEditorProps {
@@ -39,6 +78,9 @@ export default function SmsTemplateEditor({
     readOnly = false,
 }: SmsTemplateEditorProps) {
     const [showPreview, setShowPreview] = useState(false);
+    const [surveys, setSurveys] = useState<Survey[]>([]);
+    const [loadingSurveys, setLoadingSurveys] = useState(false);
+    const [surveysLoaded, setSurveysLoaded] = useState(false);
 
     const charCount = value.length;
     const segmentCount = useMemo(() => {
@@ -54,43 +96,172 @@ export default function SmsTemplateEditor({
         [value, onChange]
     );
 
+    // Load surveys on demand
+    const loadSurveys = useCallback(async () => {
+        if (surveysLoaded) return;
+        setLoadingSurveys(true);
+        try {
+            const data = await getAllSurveys('active');
+            setSurveys(data);
+            setSurveysLoaded(true);
+        } catch (error) {
+            console.error('Error loading surveys:', error);
+        } finally {
+            setLoadingSurveys(false);
+        }
+    }, [surveysLoaded]);
+
+    const insertSurveyLink = useCallback(
+        (survey: Survey) => {
+            const tag = `{{surveyLink:${survey.id}}}`;
+            onChange(value + tag);
+        },
+        [value, onChange]
+    );
+
     // Preview with sample data
     const previewText = useMemo(() => {
         return value
             .replace(/\{\{name\}\}/g, 'John Doe')
+            .replace(/\{\{phone\}\}/g, '(555) 123-4567')
             .replace(/\{\{company\}\}/g, 'ABC Solar')
             .replace(/\{\{email\}\}/g, 'john@example.com')
+            .replace(/\{\{categories\}\}/g, 'Premium, West Coast')
             .replace(/\{\{eventTitle\}\}/g, 'Q1 Dealer Summit')
             .replace(/\{\{eventDate\}\}/g, 'Mar 15, 2026')
-            .replace(/\{\{surveyLink\}\}/g, 'https://pd.solatube.tools/s/abc123');
+            .replace(/\{\{eventLink\}\}/g, 'https://pd.solatube.tools/events/abc123/register')
+            .replace(/\{\{surveyLink\}\}/g, 'https://pd.solatube.tools/s/abc123')
+            .replace(/\{\{surveyLink:[^}]+\}\}/g, 'https://pd.solatube.tools/s/abc123');
     }, [value]);
 
     return (
         <div className="space-y-3">
             {/* Toolbar */}
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
+                    {/* Merge Tags Dropdown */}
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm" disabled={readOnly}>
-                                Insert Merge Tag
-                                <ChevronDown className="ml-1 h-3 w-3" />
+                            <Button variant="outline" size="sm" disabled={readOnly} className="gap-1">
+                                <Tag className="h-3 w-3" />
+                                Insert Field
+                                <ChevronDown className="h-3 w-3" />
                             </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent>
-                            {MERGE_TAGS.map((tag) => (
-                                <DropdownMenuItem
-                                    key={tag.value}
-                                    onClick={() => insertTag(tag.value)}
-                                >
-                                    <code className="mr-2 text-xs text-muted-foreground">
-                                        {tag.value}
-                                    </code>
-                                    {tag.label}
-                                </DropdownMenuItem>
-                            ))}
+                        <DropdownMenuContent align="start" className="w-56">
+                            <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                                Contact Info
+                            </DropdownMenuLabel>
+                            {CONTACT_TAGS.map((tag) => {
+                                const Icon = tag.icon;
+                                return (
+                                    <DropdownMenuItem
+                                        key={tag.value}
+                                        onClick={() => insertTag(tag.value)}
+                                    >
+                                        <Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+                                        <span className="flex-1">{tag.label}</span>
+                                        <code className="text-[10px] text-muted-foreground/60">
+                                            {tag.value}
+                                        </code>
+                                    </DropdownMenuItem>
+                                );
+                            })}
+                            <DropdownMenuSeparator />
+                            <DropdownMenuLabel className="text-[10px] text-muted-foreground uppercase tracking-wider">
+                                Event Info
+                            </DropdownMenuLabel>
+                            {EVENT_TAGS.map((tag) => {
+                                const Icon = tag.icon;
+                                return (
+                                    <DropdownMenuItem
+                                        key={tag.value}
+                                        onClick={() => insertTag(tag.value)}
+                                    >
+                                        <Icon className="mr-2 h-3.5 w-3.5 text-muted-foreground" />
+                                        <span className="flex-1">{tag.label}</span>
+                                        <code className="text-[10px] text-muted-foreground/60">
+                                            {tag.value}
+                                        </code>
+                                    </DropdownMenuItem>
+                                );
+                            })}
                         </DropdownMenuContent>
                     </DropdownMenu>
+
+                    {/* Add Survey Button */}
+                    <Popover>
+                        <PopoverTrigger asChild>
+                            <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={readOnly}
+                                className="gap-1"
+                                onClick={loadSurveys}
+                            >
+                                <ClipboardList className="h-3 w-3" />
+                                Add Survey
+                            </Button>
+                        </PopoverTrigger>
+                        <PopoverContent align="start" className="w-72 p-0">
+                            <div className="px-3 py-2 border-b">
+                                <p className="text-xs font-semibold">Insert Survey Link</p>
+                                <p className="text-[10px] text-muted-foreground">
+                                    Choose a survey to insert its unique link
+                                </p>
+                            </div>
+                            <div className="max-h-48 overflow-y-auto">
+                                {loadingSurveys ? (
+                                    <div className="flex items-center justify-center py-6">
+                                        <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />
+                                    </div>
+                                ) : surveys.length === 0 ? (
+                                    <div className="px-3 py-4 text-center">
+                                        <ClipboardList className="h-6 w-6 mx-auto text-muted-foreground/40 mb-1" />
+                                        <p className="text-xs text-muted-foreground">
+                                            No active surveys found
+                                        </p>
+                                        <p className="text-[10px] text-muted-foreground/60 mt-0.5">
+                                            Create a survey first in the Surveys section
+                                        </p>
+                                    </div>
+                                ) : (
+                                    <div className="py-1">
+                                        {surveys.map((survey) => (
+                                            <button
+                                                key={survey.id}
+                                                onClick={() => insertSurveyLink(survey)}
+                                                className="w-full text-left px-3 py-2 hover:bg-accent transition-colors flex items-start gap-2"
+                                            >
+                                                <Link2 className="h-3.5 w-3.5 mt-0.5 text-blue-500 flex-shrink-0" />
+                                                <div className="min-w-0">
+                                                    <p className="text-xs font-medium truncate">
+                                                        {survey.title}
+                                                    </p>
+                                                    <p className="text-[10px] text-muted-foreground truncate">
+                                                        {survey.description || 'No description'}
+                                                    </p>
+                                                </div>
+                                                <Badge variant="outline" className="text-[9px] ml-auto flex-shrink-0">
+                                                    {survey.status}
+                                                </Badge>
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+                            <div className="border-t px-3 py-2">
+                                <p className="text-[10px] text-muted-foreground">
+                                    Or insert generic: <button
+                                        onClick={() => insertTag('{{surveyLink}}')}
+                                        className="text-blue-500 hover:underline font-mono"
+                                    >
+                                        {'{{surveyLink}}'}
+                                    </button>
+                                </p>
+                            </div>
+                        </PopoverContent>
+                    </Popover>
                 </div>
 
                 <Button
@@ -104,11 +275,31 @@ export default function SmsTemplateEditor({
                 </Button>
             </div>
 
+            {/* Quick-Insert Chips */}
+            {!readOnly && (
+                <div className="flex flex-wrap items-center gap-1.5">
+                    <span className="text-[10px] text-muted-foreground mr-0.5">Quick insert:</span>
+                    {QUICK_CHIPS.map((chip) => {
+                        const Icon = chip.icon;
+                        return (
+                            <button
+                                key={chip.value}
+                                onClick={() => insertTag(chip.value)}
+                                className="inline-flex items-center gap-1 rounded-full border border-dashed border-muted-foreground/30 bg-muted/40 px-2.5 py-0.5 text-[10px] font-medium text-muted-foreground hover:bg-accent hover:text-foreground hover:border-foreground/30 transition-colors"
+                            >
+                                <Icon className="h-2.5 w-2.5" />
+                                {chip.label}
+                            </button>
+                        );
+                    })}
+                </div>
+            )}
+
             {/* Editor */}
             <Textarea
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                placeholder="Type your SMS message…"
+                placeholder="Type your SMS message… Use merge tags to personalize."
                 className="min-h-[120px] font-mono text-sm"
                 readOnly={readOnly}
             />
@@ -138,6 +329,25 @@ export default function SmsTemplateEditor({
                     chars remaining in segment
                 </span>
             </div>
+
+            {/* Merge Tag Legend */}
+            <details className="text-[10px]">
+                <summary className="cursor-pointer text-muted-foreground hover:text-foreground transition-colors">
+                    Available merge tags reference
+                </summary>
+                <div className="mt-1.5 grid grid-cols-2 gap-x-4 gap-y-0.5 rounded-md border bg-muted/30 p-2">
+                    {ALL_MERGE_TAGS.map((tag) => (
+                        <div key={tag.value} className="flex items-center justify-between">
+                            <span className="text-muted-foreground">{tag.label}</span>
+                            <code className="text-muted-foreground/60 font-mono">{tag.value}</code>
+                        </div>
+                    ))}
+                    <div className="flex items-center justify-between">
+                        <span className="text-muted-foreground">Survey Link</span>
+                        <code className="text-muted-foreground/60 font-mono">{'{{surveyLink}}'}</code>
+                    </div>
+                </div>
+            </details>
 
             {/* Preview */}
             {showPreview && (

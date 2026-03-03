@@ -83,6 +83,17 @@ export default function MessagesPage() {
   const [scheduledAt, setScheduledAt] = useState('');
   const [sending, setSending] = useState(false);
 
+  // Edit state
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editChannel, setEditChannel] = useState<MessageChannel>('sms');
+  const [editSmsContent, setEditSmsContent] = useState('');
+  const [editEmailSubject, setEditEmailSubject] = useState('');
+  const [editEmailHtml, setEditEmailHtml] = useState('');
+  const [editAudienceType, setEditAudienceType] = useState<AudienceTarget['type']>('all');
+  const [editSelectedCategories, setEditSelectedCategories] = useState<string[]>([]);
+  const [editScheduledAt, setEditScheduledAt] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
+
   const loadData = useCallback(async () => {
     try {
       const [msgs, cats, tmpls, surveyData] = await Promise.all([
@@ -195,8 +206,63 @@ export default function MessagesPage() {
     }
   };
 
+  // ── Edit handlers ──
+  const startEdit = (msg: Message) => {
+    setEditingId(msg.id);
+    setEditChannel(msg.channel);
+    setEditSmsContent(msg.smsContent || '');
+    setEditEmailSubject(msg.subject || '');
+    setEditEmailHtml(msg.emailHtml || '');
+    setEditAudienceType(msg.audience.type);
+    setEditSelectedCategories(msg.audience.categoryIds || []);
+    setEditScheduledAt(
+      msg.scheduledAt
+        ? new Date(msg.scheduledAt.getTime() - msg.scheduledAt.getTimezoneOffset() * 60000)
+          .toISOString()
+          .slice(0, 16)
+        : ''
+    );
+  };
+
+  const handleEditCancel = () => {
+    setEditingId(null);
+  };
+
+  const handleEditSave = async () => {
+    if (!editingId) return;
+    setEditSaving(true);
+    try {
+      const audience: AudienceTarget = {
+        type: editAudienceType,
+        categoryIds: editAudienceType === 'categories' ? editSelectedCategories : undefined,
+      };
+      await updateMessage(editingId, {
+        channel: editChannel,
+        smsContent: editChannel !== 'email' ? editSmsContent : undefined,
+        emailHtml: editChannel !== 'sms' ? editEmailHtml : undefined,
+        subject: editChannel !== 'sms' ? editEmailSubject : undefined,
+        audience,
+        scheduledAt: editScheduledAt ? new Date(editScheduledAt) : undefined,
+      });
+      toast.success('Message updated!');
+      setEditingId(null);
+      loadData();
+    } catch (error) {
+      console.error('Edit error:', error);
+      toast.error('Failed to update message');
+    } finally {
+      setEditSaving(false);
+    }
+  };
+
   const toggleCategory = (catId: string) => {
     setSelectedCategories((prev) =>
+      prev.includes(catId) ? prev.filter((c) => c !== catId) : [...prev, catId]
+    );
+  };
+
+  const toggleEditCategory = (catId: string) => {
+    setEditSelectedCategories((prev) =>
       prev.includes(catId) ? prev.filter((c) => c !== catId) : [...prev, catId]
     );
   };
@@ -614,45 +680,184 @@ export default function MessagesPage() {
                   </TableRow>
                 </TableHeader>
                 <TableBody>
-                  {scheduledMessages.map((msg) => (
-                    <TableRow key={msg.id}>
-                      <TableCell><ChannelBadge ch={msg.channel} /></TableCell>
-                      <TableCell className="max-w-xs truncate text-sm">
-                        {msg.smsContent?.slice(0, 50) || msg.subject || '—'}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        {msg.audience.type === 'all' ? 'All' : `${msg.audience.categoryIds?.length || 0} categories`}
-                      </TableCell>
-                      <TableCell className="text-xs text-muted-foreground">
-                        {msg.scheduledAt?.toLocaleDateString(undefined, {
-                          month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
-                        })}
-                      </TableCell>
-                      <TableCell><StatusBadge status={msg.status} /></TableCell>
-                      <TableCell>
-                        <DropdownMenu>
-                          <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="icon" className="h-8 w-8">
-                              <MoreHorizontal className="h-4 w-4" />
-                            </Button>
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => handleCancel(msg.id)}>
-                              <XCircle className="mr-2 h-3.5 w-3.5" />
-                              Cancel
-                            </DropdownMenuItem>
-                            <DropdownMenuItem
-                              onClick={() => handleDelete(msg)}
-                              className="text-destructive focus:text-destructive"
-                            >
-                              <Trash2 className="mr-2 h-3.5 w-3.5" />
-                              Delete
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                  {scheduledMessages.map((msg) =>
+                    editingId === msg.id ? (
+                      <TableRow key={msg.id}>
+                        <TableCell colSpan={6} className="p-4">
+                          <div className="space-y-4 rounded-lg border bg-muted/30 p-4">
+                            <div className="flex items-center justify-between">
+                              <h3 className="text-sm font-semibold">Edit Scheduled Message</h3>
+                              <Button variant="ghost" size="icon" className="h-7 w-7" onClick={handleEditCancel}>
+                                <XCircle className="h-4 w-4" />
+                              </Button>
+                            </div>
+
+                            {/* Channel */}
+                            <div className="space-y-2">
+                              <Label className="text-xs">Channel</Label>
+                              <div className="flex gap-2">
+                                {(['sms', 'email', 'both'] as MessageChannel[]).map((ch) => (
+                                  <Button
+                                    key={ch}
+                                    variant={editChannel === ch ? 'default' : 'outline'}
+                                    size="sm"
+                                    onClick={() => setEditChannel(ch)}
+                                    className="gap-1.5"
+                                  >
+                                    {ch === 'sms' && <MessageSquare className="h-3.5 w-3.5" />}
+                                    {ch === 'email' && <Mail className="h-3.5 w-3.5" />}
+                                    {ch === 'both' && <Radio className="h-3.5 w-3.5" />}
+                                    {ch === 'both' ? 'SMS + Email' : ch.toUpperCase()}
+                                  </Button>
+                                ))}
+                              </div>
+                            </div>
+
+                            {/* SMS Content */}
+                            {(editChannel === 'sms' || editChannel === 'both') && (
+                              <div className="space-y-2">
+                                <Label className="text-xs">SMS Message</Label>
+                                <SmsTemplateEditor value={editSmsContent} onChange={setEditSmsContent} />
+                              </div>
+                            )}
+
+                            {/* Email Content */}
+                            {(editChannel === 'email' || editChannel === 'both') && (
+                              <>
+                                <div className="space-y-2">
+                                  <Label className="text-xs">Email Subject</Label>
+                                  <Input
+                                    value={editEmailSubject}
+                                    onChange={(e) => setEditEmailSubject(e.target.value)}
+                                    placeholder="Subject line…"
+                                  />
+                                </div>
+                                <div className="space-y-2">
+                                  <Label className="text-xs">Email Body (HTML)</Label>
+                                  <Textarea
+                                    value={editEmailHtml}
+                                    onChange={(e) => setEditEmailHtml(e.target.value)}
+                                    placeholder="Paste email HTML…"
+                                    className="min-h-[120px] font-mono text-xs"
+                                  />
+                                </div>
+                              </>
+                            )}
+
+                            {/* Audience */}
+                            <div className="space-y-2">
+                              <Label className="text-xs">Audience</Label>
+                              <Select
+                                value={editAudienceType}
+                                onValueChange={(v) => setEditAudienceType(v as AudienceTarget['type'])}
+                              >
+                                <SelectTrigger>
+                                  <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                  <SelectItem value="all">All Contacts</SelectItem>
+                                  <SelectItem value="categories">By Category</SelectItem>
+                                </SelectContent>
+                              </Select>
+                              {editAudienceType === 'categories' && categories.length > 0 && (
+                                <div className="flex flex-wrap gap-2">
+                                  {categories.map((cat) => (
+                                    <Badge
+                                      key={cat.id}
+                                      variant={editSelectedCategories.includes(cat.id) ? 'default' : 'outline'}
+                                      className="cursor-pointer"
+                                      onClick={() => toggleEditCategory(cat.id)}
+                                      style={
+                                        editSelectedCategories.includes(cat.id)
+                                          ? { backgroundColor: cat.color, borderColor: cat.color }
+                                          : { borderColor: cat.color, color: cat.color }
+                                      }
+                                    >
+                                      {cat.name}
+                                    </Badge>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Scheduled time */}
+                            <div className="space-y-2">
+                              <Label className="text-xs">Scheduled For</Label>
+                              <Input
+                                type="datetime-local"
+                                value={editScheduledAt}
+                                onChange={(e) => setEditScheduledAt(e.target.value)}
+                              />
+                            </div>
+
+                            {/* Actions */}
+                            <div className="flex justify-end gap-2">
+                              <Button variant="outline" size="sm" onClick={handleEditCancel} disabled={editSaving}>
+                                Cancel
+                              </Button>
+                              <Button
+                                size="sm"
+                                onClick={handleEditSave}
+                                disabled={
+                                  editSaving ||
+                                  (editChannel !== 'email' && !editSmsContent.trim()) ||
+                                  (editChannel !== 'sms' && !editEmailHtml.trim()) ||
+                                  !editScheduledAt
+                                }
+                                className="gap-1.5"
+                                style={{ backgroundColor: 'var(--solatube-blue)' }}
+                              >
+                                {editSaving && <Loader2 className="h-3.5 w-3.5 animate-spin" />}
+                                Save Changes
+                              </Button>
+                            </div>
+                          </div>
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      <TableRow key={msg.id}>
+                        <TableCell><ChannelBadge ch={msg.channel} /></TableCell>
+                        <TableCell className="max-w-xs truncate text-sm">
+                          {msg.smsContent?.slice(0, 50) || msg.subject || '—'}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {msg.audience.type === 'all' ? 'All' : `${msg.audience.categoryIds?.length || 0} categories`}
+                        </TableCell>
+                        <TableCell className="text-xs text-muted-foreground">
+                          {msg.scheduledAt?.toLocaleDateString(undefined, {
+                            month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit',
+                          })}
+                        </TableCell>
+                        <TableCell><StatusBadge status={msg.status} /></TableCell>
+                        <TableCell>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="ghost" size="icon" className="h-8 w-8">
+                                <MoreHorizontal className="h-4 w-4" />
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => startEdit(msg)}>
+                                <Pencil className="mr-2 h-3.5 w-3.5" />
+                                Edit
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => handleCancel(msg.id)}>
+                                <XCircle className="mr-2 h-3.5 w-3.5" />
+                                Cancel
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => handleDelete(msg)}
+                                className="text-destructive focus:text-destructive"
+                              >
+                                <Trash2 className="mr-2 h-3.5 w-3.5" />
+                                Delete
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    )
+                  )}
                 </TableBody>
               </Table>
             </div>
